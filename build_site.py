@@ -61,10 +61,10 @@ for i, (a, c, y0, y1) in enumerate(top, 1):
     first_rows.append([rk, a, c, y0, y1])
 
 FACTS = [
-    ("開催", f"{Y1 - Y0 + 1}回", f"{Y0}年の第1回から{Y1}年の第{Y1 - Y0 + 1}回まで"),
-    ("登壇発表", f"{S['talks']}件", f"第一著者が分かっているのは{S['talks_known']}件"),
-    ("第一著者", f"{S['authors']}人", f"{S['once']}人（{S['once_share']:.0%}）は1回だけ"),
-    ("著者として関わった人", f"{aa['people']}人", f"{Y0}年は第一著者だけを数えた"),
+    ("集計した WISS の開催の回数", f"{Y1 - Y0 + 1}回", f"{Y0}年の第1回から{Y1}年の第{Y1 - Y0 + 1}回まで"),
+    ("登壇発表の件数", f"{S['talks']}件", f"そのうち第一著者が分かっているのは{S['talks_known']}件"),
+    ("第一著者の人数", f"{S['authors']}人", f"そのうち{S['once']}人（{S['once_share']:.0%}）は登壇が1回だけ"),
+    ("著者として関わった人の数", f"{aa['people']}人", f"{Y0}年は第一著者だけを数えた"),
 ]
 
 CSS = """
@@ -198,18 +198,18 @@ html,body{height:100%;overflow:hidden}
 .deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
 .slide{position:absolute;width:1280px;height:720px;padding:56px 72px 48px;display:none;flex-direction:column;background:var(--bg);transform-origin:center center}
 .slide.on{display:flex}
-.slide h2{font-size:38px;line-height:1.3;margin:0 0 20px}
-.slide .sub{font-size:20px;color:var(--fg2);margin:-10px 0 18px}
-.slide ul{font-size:24px;line-height:1.7;margin:0;padding-left:1.2em}.slide li{margin:6px 0}
+.slide h2{font-size:32px;line-height:1.35;margin:0 0 16px}
+.slide .sub{font-size:19px;color:var(--fg2);margin:-6px 0 14px}
+.slide ul{font-size:22px;line-height:1.6;margin:0;padding-left:1.2em}.slide li{margin:6px 0}
 .slide .fig{flex:1 1 0;min-height:0;display:flex;align-items:center;justify-content:center;margin-bottom:28px;overflow:hidden}
 .slide .fig picture{display:flex;height:100%;width:100%;justify-content:center;align-items:center}
 .slide .fig img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain}
 .slide h2,.slide .sub,.slide ul,.slide .big{flex-shrink:0}
-.slide .cols{display:flex;gap:40px;flex:1;min-height:0}.slide .cols>div{flex:1;min-width:0}
-.slide table{font-size:19px;border-collapse:collapse;width:100%}.slide th,.slide td{padding:4px 10px;border-bottom:1px solid var(--line);text-align:left}
+.slide .cols{display:flex;gap:40px;flex:1 1 0;min-height:0;margin-bottom:28px}.slide .cols>div{flex:1;min-width:0}
+.slide table{font-size:17px;border-collapse:collapse;width:100%}.slide th,.slide td{padding:3px 10px;border-bottom:1px solid var(--line);text-align:left}
 .slide .num{text-align:right;font-variant-numeric:tabular-nums}.slide th{color:var(--fg2)}
-.big{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin:16px 0 28px}
-.big div{background:var(--card);border-radius:14px;padding:20px 22px}.big .k{font-size:18px;color:var(--fg2)}.big .v{font-size:52px;font-weight:700;line-height:1.2}.big .s{font-size:16px;color:var(--fg2)}
+.big{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:8px 0 22px}
+.big div{background:var(--card);border-radius:14px;padding:14px 18px}.big .k{font-size:16px;color:var(--fg2)}.big .v{font-size:44px;font-weight:700;line-height:1.2}.big .s{font-size:15px;color:var(--fg2)}
 .title h1{font-size:54px;line-height:1.35;margin:120px 0 20px}.title .meta{font-size:24px;color:var(--fg2)}
 .badge{display:inline-block;align-self:flex-start;font-size:18px;padding:2px 14px;border:1px solid var(--line);border-radius:999px;color:var(--fg2)}
 .foot{position:absolute;left:72px;right:72px;bottom:18px;font-size:14px;color:var(--fg2);display:flex;justify-content:space-between}
@@ -241,40 +241,40 @@ def build_slides():
     s = []
     s.append(slide(f'<span class="badge">{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の<br>第一著者の統計（{Y0}–{Y1}）</h1>'
                    f'<p class="meta">栗原一貴（津田塾大学）</p><p class="meta" style="font-size:18px">HTML 版：{SITE}</p>', "title"))
-    s.append(slide("<h2>何を数えたか</h2><div class=\"big\">" + "".join(
+    s.append(slide("<h2>この調査で何を数えたか</h2><div class=\"big\">" + "".join(
         f'<div><div class="k">{e(k)}</div><div class="v">{e(v)}</div><div class="s">{e(s_)}</div></div>' for k, v, s_ in FACTS) + "</div><ul>"
-        "<li>数えたのは、論文を伴う口頭発表（登壇発表）の第一著者である。</li>"
-        "<li>デモ・ポスター、招待講演、国際学会招待発表は数えていない。</li>"
-        f"<li>情報源は wiss.org の各年のプログラムと予稿集の目次。{Y0}年は書籍の目次から再構成した。</li></ul>"))
-    s.append(slide_fig("第一著者の8割は、登壇が1回だけである", f"{S['authors']}人のうち{S['once']}人（{S['once_share']:.0%}）が1回。2回以上の{repeaters}人の発表が全体の{S['talks_by_repeaters_share']:.0%}を占める", "distribution", "登壇回数ごとの人数"))
-    s.append(slide_fig_table(f"最多は{names_join(leaders)}の{max_n}回", "第一著者としての登壇回数", "ranking", "登壇回数の多い第一著者",
+        "<li>この調査で数えたのは、論文を伴う口頭発表（登壇発表）の第一著者である。</li>"
+        "<li>デモ・ポスター発表、招待講演、国際学会招待発表は数えていない。</li>"
+        f"<li>この集計の情報源は、wiss.org にある各年のプログラムと予稿集の目次である。{Y0}年は書籍の目次から再構成した。</li></ul>"))
+    s.append(slide_fig("第一著者の8割は、登壇が1回だけである", f"第一著者{S['authors']}人のうち{S['once']}人（{S['once_share']:.0%}）は、登壇が1回だけである。2回以上登壇した{repeaters}人の発表が、全体の{S['talks_by_repeaters_share']:.0%}を占める。", "distribution", "登壇回数ごとの人数"))
+    s.append(slide_fig_table(f"第一著者としての登壇が最も多いのは、{names_join(leaders)}の{max_n}回", "左の図は登壇が5回以上の人、右の表は上位10人を示す。", "ranking", "登壇回数の多い第一著者",
                              ["順位", "第一著者", "回数", "期間"], [[r[0], r[1], r[2], f"{r[3]}–{r[4]}"] for r in first_rows[:10]], (0, 2)))
-    s.append(slide_fig("登壇回数の多い人は、いつ登壇したか", "6回以上の人。大きい点は同じ年に複数件", "timeline", "登壇した年"))
-    s.append(slide_fig("登壇発表はほぼ一定、デモ・ポスターは急増", f"登壇発表は毎年{min(pyc)}件から{max(pyc)}件。デモ・ポスターは{Y1}年に{S['demos'][str(Y1)]}件", "per_year", "年ごとの発表件数"))
-    s.append(slide_fig("初登壇の第一著者による発表が増えている", f"平均は{S['first_share_mean']:.0%}。2020年以降は{min(fs20):.0%}から{max(fs20):.0%}", "first_timers", "初登壇の割合"))
-    s.append(slide_fig_table("著者全員で数えると、別の人が浮かび上がる", f"登壇発表に関わった{aa['people']}人。青は第一著者として、橙は共著者として", "authors_any", "著者として関わった数",
+    s.append(slide_fig("登壇回数の多い人は、いつ登壇したか", "登壇が6回以上の人を示す。大きい点は、同じ年に複数件の登壇があったことを表す。", "timeline", "登壇した年"))
+    s.append(slide_fig("登壇発表の件数はほぼ一定で、デモ・ポスター発表の件数は急に増えた", f"登壇発表の件数は、毎年{min(pyc)}件から{max(pyc)}件である。デモ・ポスター発表の件数は、{Y1}年に{S['demos'][str(Y1)]}件になった。", "per_year", "年ごとの発表件数"))
+    s.append(slide_fig("初めて登壇する第一著者による発表が増えている", f"各年の登壇発表のうち、第一著者が初めて登壇する発表の割合は、平均で{S['first_share_mean']:.0%}である。2020年以降は{min(fs20):.0%}から{max(fs20):.0%}である。", "first_timers", "初登壇の割合"))
+    s.append(slide_fig_table("著者全員で数えると、別の人が浮かび上がる", f"登壇発表に著者として関わった{aa['people']}人の上位を示す。棒の青い部分は第一著者として、橙の部分は共著者として関わった数である。", "authors_any", "著者として関わった数",
                              ["著者", "関わった数", "うち第一著者"], [[r[0], r[1], r[2]] for r in aa["top_any"][:10]], (1, 2)))
     lr = aa["top_last"][:10]
-    s.append(slide("<h2>最終著者と、共著の多い組</h2><div class=\"cols\"><div>"
+    s.append(slide("<h2>最終著者としての回数と、共著の多い組</h2><div class=\"cols\"><div>"
                    + mini_table(["最終著者", "回数"], [[a, c] for a, c, n in lr], (1,)) + "</div><div>"
                    + mini_table(["共著の組", "回数"], [[f"{a}・{b}", c] for a, b, c in aa["top_pairs"][:10]], (1,)) + "</div></div>"))
-    s.append(slide_fig("1件あたりの著者は増えている", f"1990年代の平均の約{ma90:.1f}人から、2020年代の平均の約{ma20:.1f}人へ", "mean_authors", "1件あたりの著者の数"))
+    s.append(slide_fig("登壇発表1件あたりの著者の数は増えている", f"1件あたりの著者の数は、1990年代の平均の約{ma90:.1f}人から、2020年代の平均の約{ma20:.1f}人に増えた。", "mean_authors", "1件あたりの著者の数"))
     s.append(slide("<h2>発表速度：年数あたりの登壇の多さ</h2><ul>"
                    "<li><b>デビュー年</b>：第一著者として初めて登壇した年</li>"
                    f"<li><b>発表速度</b>：登壇回数 ÷ デビューから{Y1}年までの経過年数</li>"
-                   "<li>そのままでは、デビューが最近の人ほど高く出る</li>"
-                   "<li>そこで、ポアソン分布の<b>95%信頼区間の下限</b>で並べる</li></ul>"
+                   "<li>登壇回数を経過年数で割っただけでは、デビューが最近の人ほど値が高く出る</li>"
+                   "<li>そこで、登壇回数がポアソン分布に従うと考え、発表速度の<b>95%信頼区間の下限</b>で並べる</li></ul>"
                    f'<div class="fig">{picture("speed_debut", "デビュー年と発表速度の散布図")}</div>'))
-    s.append(slide_fig_table(f"発表速度の下限では{sp_top[0][1]}さんが1位", "菱形が下限（順位の基準）、丸が割り算の値、線が95%信頼区間", "speed", "発表速度の下限",
+    s.append(slide_fig_table(f"発表速度の信頼区間の下限で並べると、{sp_top[0][1]}さんが1位になる", "図の菱形は信頼区間の下限（順位の基準）、丸は登壇回数を経過年数で割った値、線は95%信頼区間を表す。", "speed", "発表速度の下限",
                              ["順位", "第一著者", "下限", "回数／年数"], [[r[0], r[1], f"{r[2]:.2f}", f"{r[5]}回／{r[7]}年"] for r in sp_top[:10]], (0, 2, 3)))
-    s.append(slide_fig(f"デビューから{sp['window']}年間の登壇回数", f"{sp['window_last_debut']}年までにデビューした{sp['window_people']}人が対象", "speed_window", "10年間の登壇回数"))
-    s.append(slide("<h2>経緯と、この調査の限界</h2><ul>"
+    s.append(slide_fig(f"デビューから{sp['window']}年間の登壇回数", f"この指標の対象は、{sp['window']}年間がそろう{sp['window_last_debut']}年までにデビューした{sp['window_people']}人である。", "speed_window", "10年間の登壇回数"))
+    s.append(slide("<h2>この調査の経緯と限界</h2><ul>"
                    "<li>2011年に、1994年から2011年までの410件を Access のデータベースにまとめた</li>"
                    "<li>2026年10月に、wiss.org の全回のページから生成AI（Claude Code）で一覧を作り直し、2011年のデータベースと照合した</li>"
                    f"<li>{Y0}年は、CiNii、学会誌への再録、researchmap から第一著者を補った（{S['talks_unknown']}件は不明）</li>"
                    "<li>旧姓などの表記の揺れは、対応表に載せた人だけをそろえた</li>"
-                   + ("<li><b>暫定版</b>：WISS2026 のプログラムの公開後に2026年分を加えて確定版とする</li>" if PROVISIONAL else "")
-                   + f"</ul><p style=\"font-size:20px;margin-top:28px\">データとスクリプト：{REPO}（スクリプトは MIT、表と図は CC BY 4.0）</p>"))
+                   + ("<li>この版は暫定版である。WISS2026 のプログラムの公開後に2026年分を加えて、確定版とする</li>" if PROVISIONAL else "")
+                   + f"</ul><p style=\"font-size:20px;margin-top:28px\">この調査のデータとスクリプト：{REPO}（スクリプトは MIT、表と図は CC BY 4.0）</p>"))
     n = len(s)
     s = [x.replace("</section>", f'<div class="foot"><span>WISS 登壇発表の統計（{STATUS}・版 {e(VERSION)}）</span>'
                    f'<span class="nav">← → で移動　｜　<a href="index.html">HTML 版</a></span><span>{i + 1} / {n}</span></div></section>') for i, x in enumerate(s)]
