@@ -1,0 +1,32 @@
+このリポジトリの内容は、種類によって次のライセンスで提供する。
+
+1. スクリプト（*.py、pipeline/、extraction/）と、HTML 版・スライド版のページの組み方
+   MIT License
+
+   Copyright (c) 2026 Kazutaka Kurihara
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+2. 集計の表（data/、ranking_*.tsv、figs/stats.json）、図（figs/*.png）、README と各ページの文章、legacy/ のデータベース
+   クリエイティブ・コモンズ 表示 4.0 国際（CC BY 4.0）
+   https://creativecommons.org/licenses/by/4.0/deed.ja
+   出典の表示の例：栗原一貴「WISS 登壇発表の第一著者の統計」https://github.com/qurihara/wiss-talk-stats
+
+表に収めた発表の題名と著者名は、WISS のウェブサイト（https://www.wiss.org/）で公開されている書誌の事実である。
+論文の本文や概要は、このリポジトリには含まない。

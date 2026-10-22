@@ -1,0 +1,262 @@
+[
+ {
+  "path": "raw/web/k1993.html",
+  "url": "http://web.archive.org/web/2016id_/http://www.kindaikagaku.co.jp:80/information/kd0226.htm",
+  "sha256": "88c13f0933d028778dfb37b2fe0a7e3fcb58857e04b4fd63e9e1d5b133af81e4"
+ },
+ {
+  "path": "raw/web/y1994.html",
+  "url": "http://www.wiss.org/WISS94papers.html",
+  "sha256": "b13db4bb3b27c3a33a2c30569be602d0d79e616dd294d9e37e11315f5d9c342d"
+ },
+ {
+  "path": "raw/web/y1995.html",
+  "url": "http://www.wiss.org/WISS95papers.html",
+  "sha256": "13b18e37fb0c0d7d4a2e67a8d6987d3805f3bd55aaff34c94c2ae9c63906c412"
+ },
+ {
+  "path": "raw/web/y1996.html",
+  "url": "http://www.wiss.org/WISS96/participation.html",
+  "sha256": "6ab07e481a1995175a2765fdf14294fed446edde6572b7d0557645cd896fe1b6"
+ },
+ {
+  "path": "raw/web/y1997.html",
+  "url": "http://www.wiss.org/WISS97/program.html",
+  "sha256": "de54dd60b4764911ee4c162fa70f9f82c8502fadaf0ea998ccac854125d561ec"
+ },
+ {
+  "path": "raw/web/y1998.html",
+  "url": "http://www.wiss.org/WISS98/program.html",
+  "sha256": "731a0b921424f9327637d00e616e8f46d8ed89448b7b7bdf6d999d839c9521bb"
+ },
+ {
+  "path": "raw/web/y1999.html",
+  "url": "http://www.wiss.org/WISS99/program.html",
+  "sha256": "62997bef098f6a4f30eaea7a19bafb9598a13cca042e821cea6452fd32e4b1ea"
+ },
+ {
+  "path": "raw/web/y2000.html",
+  "url": "http://www.wiss.org/WISS2000/program.html",
+  "sha256": "77b854468e782431be116d775e621c00a7473b1e3e0d257cb7ebd75ea9ee60d9"
+ },
+ {
+  "path": "raw/web/y2001.html",
+  "url": "http://www.wiss.org/WISS2001/program.html",
+  "sha256": "6661e60e796c1128c4943d61e89a877435bb3f689663be1f24f66c366cfe3ac5"
+ },
+ {
+  "path": "raw/web/y2002.html",
+  "url": "http://www.wiss.org/WISS2002/program.html",
+  "sha256": "e021b6dd4bed960aa64765af73333b1fcf1a2492d92751f08d0354bfa745b9ff"
+ },
+ {
+  "path": "raw/web/y2003.html",
+  "url": "http://www.wiss.org/WISS2003/program.html",
+  "sha256": "96d2f9c65ef1d9bdb35654d87209cdd41fa0af440fe1a0c57703d62b91c5ef4a"
+ },
+ {
+  "path": "raw/web/y2004.html",
+  "url": "http://www.wiss.org/WISS2004/program.html",
+  "sha256": "1de8e2e00716177546bd768841cffffd6a25a2300ec41ab75939f295d4fd2160"
+ },
+ {
+  "path": "raw/web/y2005.html",
+  "url": "http://www.wiss.org/WISS2005/program.html",
+  "sha256": "6f5b9f3338a334ca63aafbd2b5d50ab236c203c49f98e36ec23068911a1071cc"
+ },
+ {
+  "path": "raw/web/p2005.html",
+  "url": "https://www.wiss.org/WISS2005Proceedings/",
+  "sha256": "bbb1e656c7b9b2b71d4114f378122ac68e5176dd598173d66826c3b18ff8bbc8"
+ },
+ {
+  "path": "raw/web/p2006.html",
+  "url": "https://www.wiss.org/WISS2006Proceedings/",
+  "sha256": "c641a7abe403b6b43f14f4f3a720b1e7e36246d6a80770b75288bf1f5554ddca"
+ },
+ {
+  "path": "raw/web/p2007.html",
+  "url": "https://www.wiss.org/WISS2007Proceedings/",
+  "sha256": "d551b232b5ecfa16e5d3db2b6d0146933cd672aa87c0f6a624a67cdf4995638e"
+ },
+ {
+  "path": "raw/web/p2008.html",
+  "url": "https://www.wiss.org/WISS2008Proceedings/",
+  "sha256": "95b465e3f91aafb28227e1d2c125bd26d790eb8948ad9eebbf8d121ac53dac6d"
+ },
+ {
+  "path": "raw/web/p2009.html",
+  "url": "https://www.wiss.org/WISS2009Proceedings/",
+  "sha256": "b349eb37e33a0edf9b61c7c40e9e2c55f9f25399b022d3c9f1dcb64869009f6a"
+ },
+ {
+  "path": "raw/web/p2010.html",
+  "url": "https://www.wiss.org/WISS2010Proceedings/",
+  "sha256": "b1963dbc1af11b3e31fadf9e8ea9194cbe9ccba07863094943cc3acd14f231a9"
+ },
+ {
+  "path": "raw/web/p2011.html",
+  "url": "https://www.wiss.org/WISS2011Proceedings/",
+  "sha256": "5d1ad74ceff0ab175c239c59cf1a3ea3b0f2253f0fdbad695118d0fab9c94d96"
+ },
+ {
+  "path": "raw/web/p2012.html",
+  "url": "https://www.wiss.org/WISS2012Proceedings/",
+  "sha256": "6caf79117feb0c681d86c507e83de67832fb5f72009dab1e55f1b47fc416dcec"
+ },
+ {
+  "path": "raw/web/p2013.html",
+  "url": "https://www.wiss.org/WISS2013Proceedings/",
+  "sha256": "98d5d5a2732429ae2355e64521b2e30554d9949921501ff2ebe818d2a685e51d"
+ },
+ {
+  "path": "raw/web/p2014.html",
+  "url": "https://www.wiss.org/WISS2014Proceedings/",
+  "sha256": "85055ef22deae26f4ee2fafe85501e61d3521092851cc5f3f07c1586dbb0d0c7"
+ },
+ {
+  "path": "raw/web/p2015.html",
+  "url": "https://www.wiss.org/WISS2015Proceedings/",
+  "sha256": "0005dd42fd4689e9cf2bfc64107ecd61556ab441b4da7d08d9d5d5aa2da14903"
+ },
+ {
+  "path": "raw/web/p2016.html",
+  "url": "https://www.wiss.org/WISS2016Proceedings/",
+  "sha256": "427a120b15d7ae129079d774b51ab1bff6fc15db945d5fa454d68fb658d6f043"
+ },
+ {
+  "path": "raw/web/p2017.html",
+  "url": "https://www.wiss.org/WISS2017Proceedings/",
+  "sha256": "aeda8c80ab894ec1351079ca5c9355e5ea89c02b5f902e906583d894d4d90c42"
+ },
+ {
+  "path": "raw/web/p2018.html",
+  "url": "https://www.wiss.org/WISS2018Proceedings/",
+  "sha256": "8499cfb741265a203a666bdb8c3079384893bf7a4e3ba56ed995d6ab749df62a"
+ },
+ {
+  "path": "raw/web/p2019.html",
+  "url": "https://www.wiss.org/WISS2019Proceedings/",
+  "sha256": "2131570f5b5c2a4aaeabfa93d4a10731bac537db6db6496d7e917484a10536ba"
+ },
+ {
+  "path": "raw/web/p2020.html",
+  "url": "https://www.wiss.org/WISS2020Proceedings/",
+  "sha256": "cb38683da28796aef2d4bed3524c6458e724f6912c136dfedf6676b221390abb"
+ },
+ {
+  "path": "raw/web/p2021.html",
+  "url": "https://www.wiss.org/WISS2021Proceedings/",
+  "sha256": "c0a7e4104cdc38060b30f6cabfab4693b033c667c4586f64c68f79eee9f8e684"
+ },
+ {
+  "path": "raw/web/p2022.html",
+  "url": "https://www.wiss.org/WISS2022Proceedings/",
+  "sha256": "171bc84935f361776986372629848560e9196d6bcd356e5b6427d9ac49dd0bf9"
+ },
+ {
+  "path": "raw/web/p2023.html",
+  "url": "https://www.wiss.org/WISS2023Proceedings/",
+  "sha256": "eecb19b3013763126e0ec81c31d2c4a8dc8c520104f35ced42175b8be46508ca"
+ },
+ {
+  "path": "raw/web/p2024.html",
+  "url": "https://www.wiss.org/WISS2024Proceedings/",
+  "sha256": "4d6ec6ebdcf7da25351274c453d80c05bc4cc4505ad8a2e5e6893defd54dbf37"
+ },
+ {
+  "path": "raw/web/p2025.html",
+  "url": "https://www.wiss.org/WISS2025Proceedings/",
+  "sha256": "e9fe3edb339da8b451a93cbc06e621764afb0f130ccec641be659b6ec575cea8"
+ },
+ {
+  "path": "raw/w9404/WISS99_demo.html",
+  "url": "http://www.wiss.org/WISS99/demo.html",
+  "sha256": "9ee3560b2469ee2caa260e64d706385c1a6b25e6af625304426cf168a681037c"
+ },
+ {
+  "path": "raw/w9404/WISS2001_wiss2001demo.html",
+  "url": "http://www.wiss.org/WISS2001/wiss2001demo.html",
+  "sha256": "0fbe4764e518c799f3d240dffaaa844df2cc68d2fd0bf931988ff3302a792100"
+ },
+ {
+  "path": "raw/w9404/WISS2002_Wiss2002demo.html",
+  "url": "http://www.wiss.org/WISS2002/Wiss2002demo.html",
+  "sha256": "32a1f665ab9cd7cea01be3370e269be05aeec2d597842e626b8c81d016820430"
+ },
+ {
+  "path": "raw/w9404/WISS2003_demoprogram.html",
+  "url": "http://www.wiss.org/WISS2003/demoprogram.html",
+  "sha256": "1fcd012bdd85e416246b8fab83ab8fd2f263b4c48605991f9913c6f869d5a45b"
+ },
+ {
+  "path": "raw/w9404/WISS2004_wiss-challenge.html",
+  "url": "http://www.wiss.org/WISS2004/wiss-challenge.html",
+  "sha256": "6b360684a9b1212e3218c8229eefe61ddbe12d0c4b1b25c67389d299760a03de"
+ },
+ {
+  "path": "raw/prog/prog2006.html",
+  "url": "https://www.wiss.org/WISS2006/Program.html",
+  "sha256": "a00906d93592044778bce0cef6dc59fa47055cd70bcaeb58f5c0702b1e68913b"
+ },
+ {
+  "path": "raw/prog/prog2007.html",
+  "url": "https://www.wiss.org/WISS2007/Program.html",
+  "sha256": "29e6ef0a94b4ddf3c0dfe0743346eb9b351f340c69bb78b14b35540258789918"
+ },
+ {
+  "path": "raw/prog/prog2008.html",
+  "url": "https://www.wiss.org/WISS2008/Program.html",
+  "sha256": "dbbc70ee26e2fd3bf07bd57ecc4144cc49aa2f49b7dfcdde81f249bb233338e3"
+ },
+ {
+  "path": "raw/prog/prog2009.html",
+  "url": "https://www.wiss.org/WISS2009/Program.html",
+  "sha256": "6f9210d939d32b15d49348bd9d4e90ffc8fae6b534d6266df374ad7d57050ad8"
+ },
+ {
+  "path": "raw/prog/prog2010.html",
+  "url": "https://www.wiss.org/WISS2010/Program.html",
+  "sha256": "6b86ce6772e1bed9e0afcdd1d0995607dde2bc0a2fbb7ccaf1dac8f23e6e0d4e"
+ },
+ {
+  "path": "raw/prog/prog2011.html",
+  "url": "https://www.wiss.org/WISS2011/Program.html",
+  "sha256": "4ca2ef2ebda6b99d3faed806af15f67187359119d4390d2db494611e6d136141"
+ },
+ {
+  "path": "raw/prog/prog2012.html",
+  "url": "https://www.wiss.org/WISS2012/Program.html",
+  "sha256": "799b0c1ccb19ee6156a41101b45f1dafe904e1d70742d167bb90ad83d9592618"
+ },
+ {
+  "path": "raw/web2/program_2020.html",
+  "url": "https://www.wiss.org/WISS2020/program.html",
+  "sha256": "8b8e383c16deebad91eec22fdd841b491a39eaa8b608612785c9a9692c9001e4"
+ },
+ {
+  "path": "raw/web2/program_2021.html",
+  "url": "https://www.wiss.org/WISS2021/program.html",
+  "sha256": "cf2df1893babebb251c851780ba59540ccccd661109635b319bb940b06faeb8a"
+ },
+ {
+  "path": "raw/web2/program_2022.html",
+  "url": "https://www.wiss.org/WISS2022/program.html",
+  "sha256": "50ba3b615db8b978f029302a6b68b8af8622282a5b2e27332bf13f80bc942f67"
+ },
+ {
+  "path": "raw/web2/program_2023.html",
+  "url": "https://www.wiss.org/WISS2023/program.html",
+  "sha256": "fba37ef6869e4e0eaa174e69c5ca46a7d4cebd0473de8f28b9a16d44f25e963e"
+ },
+ {
+  "path": "raw/web2/program_2024.html",
+  "url": "https://www.wiss.org/WISS2024/program.html",
+  "sha256": "5bed2b6657321bce7b0aa57a832a604e587108214970707a40a9f783ac332a62"
+ },
+ {
+  "path": "raw/web2/program_2025.html",
+  "url": "https://www.wiss.org/WISS2025/program.html",
+  "sha256": "984636b2cdbf50ea9ff9df4d005d1d595dcb9a82ece267df65e040a21c7f3f76"
+ }
+]

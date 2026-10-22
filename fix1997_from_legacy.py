@@ -6,7 +6,7 @@
 その姓を、同じ年の昔のデータベースに出てくる姓名に引き当てて足す。
 
 入力: raw/web/y1997 から作ったウェブの表（extraction/1994-2004 の出力。data/1997.tsv の元の版）
-使い方: python3 fix1997_from_legacy.py <ウェブから作った1997年の表>
+使い方: python3 fix1997_from_legacy.py <ウェブから作った1997年の表> [出力先。省略すると data/1997.tsv]
 """
 import csv, os, re, sys, unicodedata, difflib, openpyxl
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -33,6 +33,7 @@ for r in rows:
     extra = [to_full(surname(a)) for a in web[len(m):]] if len(web) > len(m) else []
     r["authors"] = ";".join(m + extra)
     r["first_author"] = m[0]; n += 1
-with open(os.path.join(HERE, "data", "1997.tsv"), "w", encoding="utf-8", newline="") as fh:
+OUTP = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "data", "1997.tsv")
+with open(OUTP, "w", encoding="utf-8", newline="") as fh:
     w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()), delimiter="\t", lineterminator="\n"); w.writeheader(); w.writerows(rows)
 print("置き換えた件数:", n)

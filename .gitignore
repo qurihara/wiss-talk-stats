@@ -1,4 +1,6 @@
 __pycache__/
 .DS_Store
-# 取得した元のページ。論文の概要の全文などを含むので公開しない
+# 取得した元のページ。論文の概要の全文などを含むので公開しない。pipeline/fetch_raw.py で取得し直せる
 raw/
+# pipeline/extract.py の作業場所
+build/

@@ -5,7 +5,8 @@
 有力=同じ人のほぼ同じ題名の後の論文。推定=同じ時期に同じ主題の論文。"""
 import csv, os
 HERE = os.path.dirname(os.path.abspath(__file__))
-F = os.path.join(HERE, "data", "1993.tsv")
+import sys
+F = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "data", "1993.tsv")  # 読んで、同じ場所に書き戻す
 # 題名の一部 → (第一著者, 段階, 根拠)
 INFO = {
  "InfromationCube": ("暦本純一", "確定", "CiNii の引用の書誌が複数。コンピュータソフトウェア 11巻6号（1994）に再録"),

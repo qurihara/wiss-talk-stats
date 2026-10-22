@@ -300,10 +300,30 @@
 | [fix1997_from_legacy.py](fix1997_from_legacy.py) | 1997年の著者を2011年のデータベースの姓名で補う |
 | [fill1993.py](fill1993.py) | 1993年の第一著者を根拠つきで書き込む |
 | [legacy/](legacy/) | 2011年に作った Access のデータベースと、その Excel と CSV の写し |
-| [extraction/](extraction/) | wiss.org から取得したページから `data/` を作ったスクリプト。取得したページそのものは、論文の概要の全文などを含むので公開していない。スクリプトの中の `WORK` は作業に使った一時フォルダを表すので、動かすときは入出力の場所に書き換える |
+| [extraction/](extraction/) | 取得したページから年ごとの表を作るスクリプト。年代ごとに分かれている。中の `WORK` は作業の場所を表し、`pipeline/extract.py` がこの名前のフォルダを組み立てて動かす |
+| [pipeline/](pipeline/) | 元のページの取得、中間のファイルの作成、抜き出しと照合の手順（[再現と発展のための手順](#再現と発展のための手順)） |
+| [LICENSE](LICENSE) | ライセンス。スクリプトは MIT、表と図と文章は CC BY 4.0 |
 | [build_site.py](build_site.py) | HTML 版（index.html）とスライド版（slides.html）を作る |
 | [VERSION](VERSION) | 版の番号。README、HTML 版、スライド版に表示する |
 | [CHANGELOG.md](CHANGELOG.md) | 変更履歴 |
+
+## 再現と発展のための手順
+
+集計に使った表、スクリプト、2011年のデータベースは、すべてこのリポジトリに入っている。取得した元のページ（wiss.org のプログラムと予稿集の目次）だけは、論文の概要の全文を含むので入れていない。その代わりに、元のページを取得し直して、年ごとの表を1から作り直す手順を用意した。Python 3 と matplotlib があれば動く。
+
+1. `python3 pipeline/fetch_raw.py` … 元のページ52件を wiss.org と Internet Archive から `raw/` に取得する。URL と、2026年10月22日に取得したときの SHA-256 は [pipeline/sources.json](pipeline/sources.json) にある。当時から中身が変わったページがあれば表示する。
+2. `python3 pipeline/prepare.py` … 文字コードを UTF-8 にそろえた写しと、文字だけの写しを作る。古いページは文字コードがまちまちなので、ファイルごとに指定してある。
+3. `python3 pipeline/extract.py` … 年代ごとの抜き出しのスクリプト（[extraction/](extraction/)）を動かして年ごとの表を `build/WORK/out/` に作り、公開している `data/` と1件ずつ照合する。
+4. `python3 rank.py`、`python3 make_figures.py`、`python3 build_site.py` … 順位表、図と数値、HTML 版とスライド版を作る。
+
+2026年10月22日に、元のページを持たない空のフォルダでこの手順を通して動かし、33年分の表、順位表、図の数値、2つのページが、公開しているものと一致することを確かめた。
+
+この調査を発展させるときの入口は、次のとおりである。
+
+- **別の数え方を試す**：`data/<年>.tsv` の `kind` 列に、デモ、招待講演、国際学会招待発表なども区分を付けて残してある。`rank.py` の `COUNTED` を変えれば、数える範囲を変えられる。
+- **名前の表記の揺れを直す**：`rank.py` の `ALIASES` に、同一人物の別の表記を足す。
+- **1993年を埋める**：`fill1993.py` の対応表に、第一著者と根拠を足す。
+- **新しい年を足す**：`data/<年>.tsv` を同じ列で作り、手順4を動かす。
 
 ## 作り直す手順
 

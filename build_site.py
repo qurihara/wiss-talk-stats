@@ -105,7 +105,7 @@ def intro_text():
 
 def build_index():
     toc = [("summary", "調査の結果の概要"), ("first", "第一著者の登壇回数"), ("trend", "年ごとの推移"),
-           ("authors", "著者全員で見た分析"), ("speed", "発表速度"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界")]
+           ("authors", "著者全員で見た分析"), ("speed", "発表速度"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界"), ("reuse", "データと再現の手順")]
     body = []
     body.append(f'<header><span class="badge">{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者の統計（{Y0}–{Y1}）</h1>'
                 f'<p class="lead">{e(intro_text())}</p><p class="lead">調査と集計：栗原一貴（津田塾大学）　｜　<a href="slides.html">スライド版</a>　｜　<a href="{REPO}">データとスクリプト（GitHub）</a></p></header>')
@@ -184,7 +184,8 @@ def build_index():
                 f"<li>{Y0}年の第一著者のうち2件は、同じ時期に同じ主題の論文を書いていることからの推定である。</li>"
                 "<li>同じ人が姓を変えた場合、対応表に載せた人だけを同一人物として扱っている。英字の名前は照合していない。</li>"
                 "<li>デモ・ポスター発表は、一覧が残っている年だけを数えた。</li></ul>")
-    body.append(f'<footer>版 {e(VERSION)}（{STATUS}）　｜　<a href="{REPO}/blob/main/CHANGELOG.md">変更履歴</a>　｜　<a href="{REPO}">GitHub</a>　｜　調査と集計：栗原一貴（津田塾大学）</footer>')
+    body.append(f'<h2 id="reuse">データと再現の手順</h2><p>集計に使った表、スクリプト、2011年のデータベースは、すべて <a href="{REPO}">GitHub のリポジトリ</a>にある。元のページを取得し直して、年ごとの表を1から作り直す手順も用意した（<a href="{REPO}#再現と発展のための手順">再現と発展のための手順</a>）。スクリプトは MIT ライセンス、表と図と文章は CC BY 4.0 で提供する。</p>')
+    body.append(f'<footer>版 {e(VERSION)}（{STATUS}）　｜　<a href="{REPO}/blob/main/LICENSE">ライセンス</a>　｜　<a href="{REPO}/blob/main/CHANGELOG.md">変更履歴</a>　｜　<a href="{REPO}">GitHub</a>　｜　調査と集計：栗原一貴（津田塾大学）</footer>')
     return ("<!doctype html><html lang=\"ja\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
             f"<title>WISS 登壇発表の統計</title><meta name=\"description\" content=\"{e(intro_text())}\">"
             '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -273,7 +274,7 @@ def build_slides():
                    f"<li>{Y0}年は、CiNii、学会誌への再録、researchmap から第一著者を補った（{S['talks_unknown']}件は不明）</li>"
                    "<li>旧姓などの表記の揺れは、対応表に載せた人だけをそろえた</li>"
                    + ("<li><b>暫定版</b>：WISS2026 のプログラムの公開後に2026年分を加えて確定版とする</li>" if PROVISIONAL else "")
-                   + f"</ul><p style=\"font-size:20px;margin-top:28px\">データとスクリプト：{REPO}</p>"))
+                   + f"</ul><p style=\"font-size:20px;margin-top:28px\">データとスクリプト：{REPO}（スクリプトは MIT、表と図は CC BY 4.0）</p>"))
     n = len(s)
     s = [x.replace("</section>", f'<div class="foot"><span>WISS 登壇発表の統計（{STATUS}・版 {e(VERSION)}）</span><span>{i + 1} / {n}</span></div></section>') for i, x in enumerate(s)]
     js = """

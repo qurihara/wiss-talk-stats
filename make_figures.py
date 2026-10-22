@@ -188,7 +188,7 @@ anyc, firstc, lastc = collections.Counter(), collections.Counter(), collections.
 yrs = collections.defaultdict(set)
 pairs = collections.Counter()
 for y, al in papers:
-    for a in set(al):
+    for a in dict.fromkeys(al):  # 重複を除き、並び順は保つ（集合は実行ごとに順が変わる）
         anyc[a] += 1; yrs[a].add(y)
     firstc[al[0]] += 1
     if len(al) >= 2 and y != 1993:
