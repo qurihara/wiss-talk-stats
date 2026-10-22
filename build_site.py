@@ -10,7 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 S = json.load(open(os.path.join(HERE, "figs", "stats.json"), encoding="utf-8"))
 VERSION = open(os.path.join(HERE, "VERSION"), encoding="utf-8").read().strip()
 REPO = "https://github.com/qurihara/wiss-talk-stats"
-SITE = "https://qurihara.github.io/wiss-talk-stats/"
+SITE = "https://unryu.org/wiss-talk-stats/"
 Y0, Y1 = S["years"]
 PROVISIONAL = Y1 < 2026  # 2026年分を足すまでは暫定版
 STATUS = "暫定版" if PROVISIONAL else "確定版"

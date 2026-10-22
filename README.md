@@ -8,8 +8,8 @@
 
 調査と集計：栗原一貴（津田塾大学）　｜　版 0.1.0（暫定版）　｜　[変更履歴](CHANGELOG.md)
 
-- **HTML 版**：https://qurihara.github.io/wiss-talk-stats/
-- **スライド版**：https://qurihara.github.io/wiss-talk-stats/slides.html （← → キーで移動）
+- **HTML 版**：https://unryu.org/wiss-talk-stats/
+- **スライド版**：https://unryu.org/wiss-talk-stats/slides.html （← → キーで移動）
 
 ## 調査の結果の概要
 
