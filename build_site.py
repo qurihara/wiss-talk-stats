@@ -213,8 +213,8 @@ html,body{height:100%;overflow:hidden}
 .title h1{font-size:54px;line-height:1.35;margin:120px 0 20px}.title .meta{font-size:24px;color:var(--fg2)}
 .badge{display:inline-block;align-self:flex-start;font-size:18px;padding:2px 14px;border:1px solid var(--line);border-radius:999px;color:var(--fg2)}
 .foot{position:absolute;left:72px;right:72px;bottom:18px;font-size:14px;color:var(--fg2);display:flex;justify-content:space-between}
-.hint{position:fixed;right:16px;bottom:12px;font-size:13px;color:var(--fg2)}
-@media print{html,body{overflow:visible;height:auto}.deck{position:static;display:block}.slide{position:relative;display:flex!important;transform:none!important;page-break-after:always}.hint{display:none}@page{size:1280px 720px;margin:0}}
+.foot .nav a{color:var(--fg2)}
+@media print{html,body{overflow:visible;height:auto}.deck{position:static;display:block}.slide{position:relative;display:flex!important;transform:none!important;page-break-after:always}.foot .nav{visibility:hidden}@page{size:1280px 720px;margin:0}}
 """
 
 
@@ -276,7 +276,8 @@ def build_slides():
                    + ("<li><b>暫定版</b>：WISS2026 のプログラムの公開後に2026年分を加えて確定版とする</li>" if PROVISIONAL else "")
                    + f"</ul><p style=\"font-size:20px;margin-top:28px\">データとスクリプト：{REPO}（スクリプトは MIT、表と図は CC BY 4.0）</p>"))
     n = len(s)
-    s = [x.replace("</section>", f'<div class="foot"><span>WISS 登壇発表の統計（{STATUS}・版 {e(VERSION)}）</span><span>{i + 1} / {n}</span></div></section>') for i, x in enumerate(s)]
+    s = [x.replace("</section>", f'<div class="foot"><span>WISS 登壇発表の統計（{STATUS}・版 {e(VERSION)}）</span>'
+                   f'<span class="nav">← → で移動　｜　<a href="index.html">HTML 版</a></span><span>{i + 1} / {n}</span></div></section>') for i, x in enumerate(s)]
     js = """
 const S=[...document.querySelectorAll('.slide')];let i=Math.max(0,Math.min(S.length-1,(parseInt(location.hash.slice(1))||1)-1));
 function fit(){const k=Math.min(innerWidth/1280,innerHeight/720);S.forEach(s=>s.style.transform='scale('+k+')')}
@@ -292,7 +293,7 @@ addEventListener('resize',fit);fit();show(i);
             '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
             '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">'
             f"<style>{SLIDE_CSS}</style></head><body><div class=\"deck\">" + "\n".join(s)
-            + '</div><div class="hint">← → で移動　｜　<a href="index.html">HTML 版</a></div>'
+            + '</div>'
             + f"<script>{js}</script></body></html>")
 
 

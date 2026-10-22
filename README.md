@@ -6,7 +6,7 @@
 > **暫定版である。** WISS2026（第34回）のプログラムが公開されたあとに2026年分を加え、確定版として公開する予定である。
 > 図と数値は `make_figures.py` で `data/` から作り直せるので、2026年分の表を足せば確定版の図になる。
 
-調査と集計：栗原一貴（津田塾大学）　｜　版 0.1.0（暫定版）　｜　[変更履歴](CHANGELOG.md)
+調査と集計：栗原一貴（津田塾大学）　｜　版 0.1.1（暫定版）　｜　[変更履歴](CHANGELOG.md)
 
 - **HTML 版**：https://unryu.org/wiss-talk-stats/
 - **スライド版**：https://unryu.org/wiss-talk-stats/slides.html （← → キーで移動）
