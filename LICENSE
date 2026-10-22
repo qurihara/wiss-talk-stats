@@ -26,7 +26,7 @@
 2. 集計の表（data/、ranking_*.tsv、figs/stats.json）、図（figs/*.png）、README と各ページの文章、legacy/ のデータベース
    クリエイティブ・コモンズ 表示 4.0 国際（CC BY 4.0）
    https://creativecommons.org/licenses/by/4.0/deed.ja
-   出典の表示の例：栗原一貴「WISS 登壇発表の第一著者の統計」https://github.com/qurihara/wiss-talk-stats
+   出典の表示の例：栗原一貴「WISS 登壇発表の第一著者（すなわちおそらく発表者）の統計」https://github.com/qurihara/wiss-talk-stats
 
 表に収めた発表の題名と著者名は、WISS のウェブサイト（https://www.wiss.org/）で公開されている書誌の事実である。
 論文の本文や概要は、このリポジトリには含まない。

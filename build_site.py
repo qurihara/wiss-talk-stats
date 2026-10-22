@@ -107,7 +107,7 @@ def build_index():
     toc = [("summary", "調査の結果の概要"), ("first", "第一著者の登壇回数"), ("trend", "年ごとの推移"),
            ("authors", "著者全員で見た分析"), ("speed", "発表速度"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界"), ("reuse", "データと再現の手順")]
     body = []
-    body.append(f'<header><span class="badge">{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者の統計（{Y0}–{Y1}）</h1>'
+    body.append(f'<header><span class="badge">{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者（すなわちおそらく発表者）の統計（{Y0}–{Y1}）</h1>'
                 f'<p class="lead">{e(intro_text())}</p><p class="lead">調査と集計：栗原一貴（津田塾大学）　｜　<a href="slides.html">スライド版</a>　｜　<a href="{REPO}">データとスクリプト（GitHub）</a></p></header>')
     if PROVISIONAL:
         body.append('<p class="note"><b>暫定版である。</b> WISS2026（第34回）のプログラムが公開されたあとに2026年分を加え、確定版とする予定である。</p>')
@@ -239,7 +239,7 @@ def mini_table(head, rows, num_cols=()):
 
 def build_slides():
     s = []
-    s.append(slide(f'<span class="badge">{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の<br>第一著者の統計（{Y0}–{Y1}）</h1>'
+    s.append(slide(f'<span class="badge">{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者<br>（すなわちおそらく発表者）の統計<br>（{Y0}–{Y1}）</h1>'
                    f'<p class="meta">栗原一貴（津田塾大学）</p><p class="meta" style="font-size:18px">HTML 版：{SITE}</p>', "title"))
     s.append(slide("<h2>この調査で何を数えたか</h2><div class=\"big\">" + "".join(
         f'<div><div class="k">{e(k)}</div><div class="v">{e(v)}</div><div class="s">{e(s_)}</div></div>' for k, v, s_ in FACTS) + "</div><ul>"
