@@ -33,6 +33,8 @@ ma20 = statistics.mean(v for y, v in ma.items() if y >= 2020)
 fs = {int(k): v for k, v in S["first_share"].items()}
 fs20 = [v for y, v in fs.items() if y >= 2020]
 pyc = list(S["per_year"].values())
+DY = max(int(y) for y in S["demos"])  # デモの一覧がある最後の年
+DN = S["demos"][str(DY)]
 repeaters = S["authors"] - S["once"]
 any1 = aa["top_any"][0]
 any2 = aa["top_any"][1]
@@ -119,7 +121,7 @@ def build_index():
                 f"<li>第一著者の{S['once_share']:.0%}（{S['once']}人）は、登壇発表が1回だけである。2回以上登壇した{repeaters}人の発表が、全体の{S['talks_by_repeaters_share']:.0%}を占める。</li>"
                 f"<li>最も多く登壇したのは、{e(names_join(leaders))}の{max_n}回である。</li>"
                 f"<li>各年の登壇発表のうち、第一著者が WISS で初めて登壇する発表の割合は、平均で{S['first_share_mean']:.0%}である。2020年以降は{min(fs20):.0%}から{max(fs20):.0%}である。</li>"
-                f"<li>登壇発表は毎年{min(pyc)}件から{max(pyc)}件でほぼ一定である。一方、デモ・ポスター発表は2020年以降に大きく増え、{Y1}年には{S['demos'][str(Y1)]}件になった。</li>"
+                f"<li>登壇発表は毎年{min(pyc)}件から{max(pyc)}件でほぼ一定である。一方、デモ・ポスター発表は2020年以降に大きく増え、{DY}年には{DN}件になった。</li>"
                 f"<li>著者全員で数えると、登壇発表に関わった人は{aa['people']}人である。最も多くの登壇発表に関わったのは{e(any1[0])}さんの{any1[1]}件である。</li>"
                 f"<li>登壇回数をデビューからの経過年数で割った「発表速度」を、95%信頼区間の下限で並べると、{e(sp_top[0][1])}さん、{e(sp_top[1][1])}さん、{e(sp_top[2][1])}さんの順になる。</li>"
                 "</ul>")
@@ -250,7 +252,7 @@ def build_slides():
     s.append(slide_fig_table(f"第一著者としての登壇が最も多いのは、{names_join(leaders)}の{max_n}回", "左の図は登壇が5回以上の人、右の表は上位10人を示す。", "ranking", "登壇回数の多い第一著者",
                              ["順位", "第一著者", "回数", "期間"], [[r[0], r[1], r[2], f"{r[3]}–{r[4]}"] for r in first_rows[:10]], (0, 2)))
     s.append(slide_fig("登壇回数の多い人は、いつ登壇したか", "登壇が6回以上の人を示す。大きい点は、同じ年に複数件の登壇があったことを表す。", "timeline", "登壇した年"))
-    s.append(slide_fig("登壇発表の件数はほぼ一定で、デモ・ポスター発表の件数は急に増えた", f"登壇発表の件数は、毎年{min(pyc)}件から{max(pyc)}件である。デモ・ポスター発表の件数は、{Y1}年に{S['demos'][str(Y1)]}件になった。", "per_year", "年ごとの発表件数"))
+    s.append(slide_fig("登壇発表の件数はほぼ一定で、デモ・ポスター発表の件数は急に増えた", f"登壇発表の件数は、毎年{min(pyc)}件から{max(pyc)}件である。デモ・ポスター発表の件数は、{DY}年に{DN}件になった。", "per_year", "年ごとの発表件数"))
     s.append(slide_fig("初めて登壇する第一著者による発表が増えている", f"各年の登壇発表のうち、第一著者が初めて登壇する発表の割合は、平均で{S['first_share_mean']:.0%}である。2020年以降は{min(fs20):.0%}から{max(fs20):.0%}である。", "first_timers", "初登壇の割合"))
     s.append(slide_fig_table("著者全員で数えると、別の人が浮かび上がる", f"登壇発表に著者として関わった{aa['people']}人の上位を示す。棒の青い部分は第一著者として、橙の部分は共著者として関わった数である。", "authors_any", "著者として関わった数",
                              ["著者", "関わった数", "うち第一著者"], [[r[0], r[1], r[2]] for r in aa["top_any"][:10]], (1, 2)))

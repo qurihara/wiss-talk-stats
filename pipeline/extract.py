@@ -49,7 +49,11 @@ subprocess.run([sys.executable, os.path.join(ROOT, "fill1993.py"), os.path.join(
 
 # data/ と照合する
 same, diff = [], []
+# この手順では作らない年（別の入力から作る）。2026年は pipeline/parse_wiss2026_pdf.py が PDF から作る
+OTHER_SOURCE = {"2026.tsv"}
 for f in sorted(os.listdir(os.path.join(ROOT, "data"))):
+    if f in OTHER_SOURCE:
+        continue
     a, b = os.path.join(ROOT, "data", f), os.path.join(OUT, f)
     (same if os.path.exists(b) and filecmp.cmp(a, b, shallow=False) else diff).append(f)
 print(f"data/ と一致した年 {len(same)} 件、違う年 {len(diff)} 件", diff)

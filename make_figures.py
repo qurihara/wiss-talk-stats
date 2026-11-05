@@ -135,7 +135,8 @@ for mode, t in THEMES.items():
     ax.plot(xs, [demos.get(y, None) or float("nan") for y in xs], color=t["s2"], linewidth=2, marker="o", markersize=4, label="デモ・ポスター")
     ax.plot(xs, [per_year.get(y, 0) for y in xs], color=t["s1"], linewidth=2, marker="o", markersize=4, label="登壇発表")
     ax.text(Y1 + 0.4, per_year[Y1], "登壇発表", color=t["text"], fontsize=9, va="center")
-    ax.text(Y1 + 0.4, demos[Y1], "デモ・ポスター", color=t["text"], fontsize=9, va="center")
+    DY = max(demos)  # デモの一覧がある最後の年（2026年はデモの一覧をまだ入れていない）
+    ax.text(DY + 0.4, demos[DY], "デモ・ポスター", color=t["text"], fontsize=9, va="center")
     ax.legend(loc="upper left", frameon=False, fontsize=9, labelcolor=t["text"])
     ax.set_xlim(Y0 - 0.5, Y1 + 4.5); ax.set_ylim(0, None)
     ax.set_ylabel("件数", color=t["text2"], fontsize=9)
