@@ -108,7 +108,7 @@ def intro_text():
 
 
 def build_index():
-    toc = [("summary", "調査の結果の概要"), ("first", "第一著者の登壇回数"), ("trend", "年ごとの推移"),
+    toc = [("summary", "調査の結果の概要"), ("first", "第一著者の登壇回数"), ("trend", "年ごとの推移"), ("streak", "連続登壇の最長記録"),
            ("authors", "著者全員で見た分析"), ("speed", "発表速度"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界"), ("reuse", "データと再現の手順")]
     body = []
     body.append(f'<header><span class="badge">{AS_OF_JA}時点・{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者（すなわちおそらく発表者）の統計（{Y0}–{Y1}）</h1>'
@@ -133,12 +133,18 @@ def build_index():
     body.append(f'<figure>{picture("distribution", "登壇回数ごとの第一著者の人数の棒グラフ")}<figcaption>縦軸は対数目盛である。1回の人数（{S["once"]}人）と、それ以外の人数の差が大きいためである。</figcaption></figure>')
     body.append(f'<figure>{picture("timeline", "登壇回数の多い第一著者が登壇した年を示す点の図")}</figure>')
     body.append("<h3>登壇回数が4回以上の第一著者</h3>" + table(["順位", "第一著者", "登壇回数", "最初の年", "最後の年"], first_rows, (0, 2, 3, 4))
-                + f'<p>同じ回数の人は、最初に登壇した年の順に並べた。全員分の表は <a href="{REPO}/blob/main/ranking_all.tsv">ranking_all.tsv</a> にある。</p>')
+                + f'<p>同じ回数の人は、最後に登壇した年が新しい順に並べた（いまも登壇している人を先にするため。それも同じなら、最初に登壇した年の順）。全員分の表は <a href="{REPO}/blob/main/ranking_all.tsv">ranking_all.tsv</a> にある。</p>')
 
     body.append('<h2 id="trend">年ごとの推移</h2>')
     body.append(f'<figure>{picture("per_year", "年ごとの登壇発表とデモ・ポスター発表の件数の折れ線グラフ")}<figcaption>デモ・ポスター発表は、予稿集かプログラムに一覧が残っている分だけを数えた。1993年から1996年は一覧が無い。</figcaption></figure>')
     body.append(f'<figure>{picture("first_timers", "初登壇の第一著者による発表の割合の折れ線グラフ")}</figure>')
 
+    st = S["streak"]
+    body.append('<h2 id="streak">連続登壇の最長記録</h2>')
+    body.append(f"<p>第一著者として登壇した年が何年続いたかの最長記録である。最も長いのは{e(st['top'][0][1])}さんの{st['top'][0][2]}年連続（{st['top'][0][3]}年から{st['top'][0][4]}年）である。同じ年数の人は、記録が新しい順に並べた。</p>")
+    body.append(f'<figure>{picture("streak", "連続登壇の最長記録が4年以上の人の横棒グラフ")}</figure>')
+    body.append(table(["順位", "第一著者", "連続登壇の最長記録（年）", "期間", "登壇回数"], [[r[0], r[1], r[2], f"{r[3]}–{r[4]}", r[5]] for r in st["top"]], (0, 2, 4))
+                + f'<p>3年以上続けて登壇した人を挙げた。全員分の表は <a href="{REPO}/blob/main/ranking_streak.tsv">ranking_streak.tsv</a> にある。</p>')
     body.append('<h2 id="authors">著者全員で見た分析</h2>')
     body.append(f"<p>第一著者だけでなく、登壇発表の著者として名前を連ねた人を全員数えた。{Y0 + 1}年以降は著者全員を数え、{Y0}年は共著者が分からないので、分かっている第一著者だけを数えた。</p><ul>"
                 f"<li>登壇発表に著者として関わった人は {aa['people']}人 である。</li>"
@@ -258,6 +264,8 @@ def build_slides():
     s.append(slide_fig("登壇回数の多い人は、いつ登壇したか", "登壇が6回以上の人を示す。大きい点は、同じ年に複数件の登壇があったことを表す。", "timeline", "登壇した年"))
     s.append(slide_fig("登壇発表の件数はほぼ一定で、デモ・ポスター発表の件数は急に増えた", f"登壇発表の件数は、毎年{min(pyc)}件から{max(pyc)}件である。デモ・ポスター発表の件数は、{DY}年に{DN}件になった。", "per_year", "年ごとの発表件数"))
     s.append(slide_fig("初めて登壇する第一著者による発表が増えている", f"各年の登壇発表のうち、第一著者が初めて登壇する発表の割合は、平均で{S['first_share_mean']:.0%}である。2020年以降は{min(fs20):.0%}から{max(fs20):.0%}である。", "first_timers", "初登壇の割合"))
+    s.append(slide_fig_table(f"連続登壇の最長記録は{S['streak']['top'][0][1]}さんの{S['streak']['top'][0][2]}年連続", "第一著者として続けて登壇した年数。同じ年数なら、記録が新しい人を先にした。", "streak", "連続登壇の最長記録",
+                             ["順位", "第一著者", "年数", "期間"], [[r[0], r[1], r[2], f"{r[3]}–{r[4]}"] for r in S["streak"]["top"][:10]], (0, 2)))
     s.append(slide_fig_table("著者全員で数えると、別の人が浮かび上がる", f"登壇発表に著者として関わった{aa['people']}人の上位を示す。棒の青い部分は第一著者として、橙の部分は共著者として関わった数である。", "authors_any", "著者として関わった数",
                              ["著者", "関わった数", "うち第一著者"], [[r[0], r[1], r[2]] for r in aa["top_any"][:10]], (1, 2)))
     lr = aa["top_last"][:10]

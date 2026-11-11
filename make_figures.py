@@ -57,7 +57,8 @@ for y in years:
     first_share[y] = new / len(ys) if ys else None
     seen.update(ys)
 
-ranked = sorted(cnt.items(), key=lambda kv: (-kv[1], min(years_of[kv[0]])))
+# 同じ回数なら、最後に登壇した年が新しい人を先にする。それも同じなら、最初に登壇した年の順
+ranked = sorted(cnt.items(), key=lambda kv: (-kv[1], -max(years_of[kv[0]]), min(years_of[kv[0]])))
 stats = {
     "years": [Y0, Y1], "talks": len(talks), "talks_known": len(known), "talks_unknown": len(unknown),
     "authors": len(cnt), "dist": {str(k): dist[k] for k in sorted(dist)},
@@ -332,3 +333,42 @@ for mode, t in THEMES.items():
     save(fig, "speed_window", mode, t)
 print("発表速度", [(x["rank"], x["name"], round(x["lower"], 3), x["n"], x["years"]) for x in speed[:12]])
 print("10年間", [(x["wrank"], x["name"], x["window"], x["debut"]) for x in win[:15]])
+
+
+# ================= 連続登壇の最長記録 =================
+# 第一著者として登壇した年が、何年続いたかの最長記録。WISS は1993年から毎年開かれている（2020年はオンライン）。
+def longest_run(ys):
+    s = sorted(set(ys)); best, cur, st, bs, be = 1, 1, s[0], s[0], s[0]
+    for p, q in zip(s, s[1:]):
+        if q == p + 1:
+            cur += 1
+        else:
+            cur, st = 1, q
+        if cur > best:
+            best, bs, be = cur, st, q
+    return best, bs, be
+runs = sorted(((a,) + longest_run(years_of[a]) for a in cnt), key=lambda x: (-x[1], -x[3], x[2]))
+with open(os.path.join(HERE, "ranking_streak.tsv"), "w", encoding="utf-8") as out:
+    out.write("順位\t第一著者\t連続登壇の最長記録（年）\t始まりの年\t終わりの年\t登壇回数\n")
+    prev, rk = None, 0
+    srows = []
+    for i, (a, L, b, e) in enumerate(runs, 1):
+        if L != prev:
+            rk, prev = i, L
+        srows.append([rk, a, L, b, e, cnt[a]])
+        out.write(f"{rk}\t{a}\t{L}\t{b}\t{e}\t{cnt[a]}\n")
+stats["streak"] = {"top": [r for r in srows if r[2] >= 3], "dist": {str(k): v for k, v in sorted(collections.Counter(r[2] for r in srows).items())}}
+json.dump(stats, open(os.path.join(FIGS, "stats.json"), "w"), ensure_ascii=False, indent=1)
+for mode, t in THEMES.items():
+    top = [r for r in srows if r[2] >= 4][::-1]
+    fig, ax = plt.subplots(figsize=(7.2, 0.34 * len(top) + 1.1))
+    frame(ax, t); ax.grid(axis="y", visible=False); ax.grid(axis="x", color=t["grid"], linewidth=0.8)
+    ax.barh(range(len(top)), [r[2] for r in top], height=0.62, color=t["s1"])
+    for i, r in enumerate(top):
+        ax.text(r[2] + 0.1, i, f"{r[2]}年（{r[3]}–{r[4]}）", va="center", ha="left", color=t["text"], fontsize=8.5)
+    ax.set_yticks(range(len(top))); ax.set_yticklabels([r[1] for r in top], color=t["text"], fontsize=9.5)
+    ax.set_xlim(0, max(r[2] for r in top) + 3)
+    ax.set_xlabel("第一著者として連続して登壇した年数の最長記録", color=t["text2"], fontsize=9)
+    title(fig, t, "連続登壇の最長記録", f"WISS {Y0}–{Y1}、4年以上続けて登壇した人。同じ年数なら、記録が新しい人を先にした")
+    save(fig, "streak", mode, t)
+print("連続登壇", [(r[0], r[1], r[2], r[3], r[4]) for r in srows[:12]])

@@ -52,7 +52,8 @@ def main():
     years = collections.defaultdict(list)
     for r in talks:
         years[r["fa"]].append(r["year"])
-    ranked = sorted(cnt.items(), key=lambda kv: (-kv[1], min(years[kv[0]])))
+    # 同じ回数なら、最後に登壇した年が新しい人を先にする。それも同じなら、最初に登壇した年の順
+    ranked = sorted(cnt.items(), key=lambda kv: (-kv[1], -max(map(int, years[kv[0]])), min(map(int, years[kv[0]]))))
     with open(os.path.join(HERE, "ranking_all.tsv"), "w", encoding="utf-8") as out:
         out.write("順位\t第一著者\t登壇回数\t最初の年\t最後の年\t年の一覧\n")
         prev, rank = None, 0
