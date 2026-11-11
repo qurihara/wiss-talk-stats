@@ -45,6 +45,21 @@ sp_top = sp["top"]
 win_top = sp["window_top"]
 
 
+def presence_note(S):
+    pr = S["presence"]; k, g = pr["rank"]["栗原一貴"], pr["rank"]["五十嵐健夫"]
+    if k > g:
+        return (f"この指標は、調査者の栗原一貴が、なんとか自分の順位が師匠である五十嵐健夫さんを上回る指標はないものかと模索した結果、思いついたものである。"
+                f"しかし、栗原は{k}位（{pr['value']['栗原一貴']:.1f}）で、五十嵐さんの{g}位（{pr['value']['五十嵐健夫']:.1f}）には、まだ届かなかった。")
+    return (f"この指標は、調査者の栗原一貴が、なんとか自分の順位が師匠である五十嵐健夫さんを上回る指標はないものかと模索した結果、思いついたものである。"
+            f"栗原は{k}位（{pr['value']['栗原一貴']:.1f}）で、五十嵐さんの{g}位（{pr['value']['五十嵐健夫']:.1f}）を、ついに上回った。")
+
+
+def presence_note_short(S):
+    pr = S["presence"]; k, g = pr["rank"]["栗原一貴"], pr["rank"]["五十嵐健夫"]
+    tail = f"まだ届かなかった（栗原は{k}位、五十嵐さんは{g}位）。" if k > g else f"ついに上回った（栗原は{k}位、五十嵐さんは{g}位）。"
+    return "調査者の栗原が、師匠の五十嵐健夫さんを上回る指標を探して思いついた指標。しかし、" + tail if k > g else "調査者の栗原が、師匠の五十嵐健夫さんを上回る指標を探して思いついた指標。そして、" + tail
+
+
 def picture(name, alt, width=None):
     w = f' width="{width}"' if width else ""
     return (f'<picture><source media="(prefers-color-scheme: dark)" srcset="figs/{name}_dark.png">'
@@ -109,7 +124,7 @@ def intro_text():
 
 def build_index():
     toc = [("summary", "調査の結果の概要"), ("first", "第一著者の登壇回数"), ("trend", "年ごとの推移"), ("streak", "連続登壇の最長記録"),
-           ("authors", "著者全員で見た分析"), ("speed", "発表速度"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界"), ("reuse", "データと再現の手順")]
+           ("authors", "著者全員で見た分析"), ("presence", "長期的な登壇の貢献"), ("speed", "発表速度"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界"), ("reuse", "データと再現の手順")]
     body = []
     body.append(f'<header><span class="badge">{AS_OF_JA}時点・{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者（すなわちおそらく発表者）の統計（{Y0}–{Y1}）</h1>'
                 f'<p class="lead">{e(intro_text())}</p><p class="lead">調査と集計：栗原一貴（津田塾大学）　｜　<a href="slides.html">スライド版</a>　｜　<a href="{REPO}">データとスクリプト（GitHub）</a></p></header>')
@@ -163,6 +178,13 @@ def build_index():
     body.append("<h3>共著の多い組（上位15組）</h3>" + table(["組", "回数"], [[f"{a}・{b}", c] for a, b, c in aa["top_pairs"]], (1,))
                 + f'<p>全員分の表は <a href="{REPO}/blob/main/ranking_authors.tsv">ranking_authors.tsv</a> にある。</p>')
 
+    pr = S["presence"]
+    body.append('<h2 id="presence">長期的な登壇の貢献</h2>')
+    body.append("<p>登壇回数の多さと、長い年月にわたって登壇し続けたことを、合わせて1つの数で表す指標である。登壇回数と活動期間の幾何平均を求めた。活動期間は、最後に登壇した年から最初に登壇した年を引いて1を足した年数である。何度も、しかも長い年月にわたって登壇し続けた人ほど大きくなる。1回だけ登壇した人は1になる。活動期間をデビューから集計の最後の年までにすると、登壇をやめたあとの年月も数えてしまうので、最後に登壇した年までにした。</p><p class=\"note\">長期的な登壇の貢献 ＝ √（登壇回数 × 活動期間の年数）</p>")
+    body.append(f"<p>{e(presence_note(S))}</p>")
+    body.append(f'<figure>{picture("presence", "長期的な登壇の貢献の上位20人の横棒グラフ")}</figure>')
+    body.append(table(["順位", "第一著者", "長期的な登壇の貢献", "登壇回数", "活動期間"], [[r[0], r[1], f"{r[2]:.1f}", r[3], f"{r[4]}–{r[5]}（{r[6]}年）"] for r in pr["top"]], (0, 2, 3))
+                + f'<p>全員分の表は <a href="{REPO}/blob/main/ranking_presence.tsv">ranking_presence.tsv</a> にある。</p>')
     body.append('<h2 id="speed">発表速度</h2>')
     body.append("<p>登壇回数の多さは、活動してきた年数の長さにも左右される。そこで、年数あたりの登壇の多さを表す指標として「発表速度」を定めた。</p><ul>"
                 "<li><b>デビュー年</b>：第一著者として初めて登壇した年。</li>"
@@ -273,6 +295,8 @@ def build_slides():
                    + mini_table(["最終著者", "回数"], [[a, c] for a, c, n in lr], (1,)) + "</div><div>"
                    + mini_table(["共著の組", "回数"], [[f"{a}・{b}", c] for a, b, c in aa["top_pairs"][:10]], (1,)) + "</div></div>"))
     s.append(slide_fig("登壇発表1件あたりの著者の数は増えている", f"1件あたりの著者の数は、1990年代の平均の約{ma90:.1f}人から、2020年代の平均の約{ma20:.1f}人に増えた。", "mean_authors", "1件あたりの著者の数"))
+    s.append(slide_fig_table("長期的な登壇の貢献：√（登壇回数 × 活動期間）", presence_note_short(S), "presence", "長期的な登壇の貢献",
+                             ["順位", "第一著者", "値", "回数", "活動期間"], [[r[0], r[1], f"{r[2]:.1f}", r[3], f"{r[4]}–{r[5]}"] for r in S["presence"]["top"][:10]], (0, 2, 3)))
     s.append(slide("<h2>発表速度：年数あたりの登壇の多さ</h2><ul>"
                    "<li><b>デビュー年</b>：第一著者として初めて登壇した年</li>"
                    f"<li><b>発表速度</b>：登壇回数 ÷ デビューから{Y1}年までの経過年数</li>"

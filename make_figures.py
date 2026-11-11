@@ -372,3 +372,38 @@ for mode, t in THEMES.items():
     title(fig, t, "連続登壇の最長記録", f"WISS {Y0}–{Y1}、4年以上続けて登壇した人。同じ年数なら、記録が新しい人を先にした")
     save(fig, "streak", mode, t)
 print("連続登壇", [(r[0], r[1], r[2], r[3], r[4]) for r in srows[:12]])
+
+
+# ================= 長期的な登壇の貢献 =================
+# 登壇回数と活動期間（最後に登壇した年 - 最初に登壇した年 + 1）の幾何平均。
+# 何度も、しかも長い年月にわたって登壇し続けた人ほど大きい。1回だけの人は 1 になる。
+import math
+pres = []
+for a, c in cnt.items():
+    span = max(years_of[a]) - min(years_of[a]) + 1
+    pres.append((a, math.sqrt(c * span), c, min(years_of[a]), max(years_of[a]), span))
+pres.sort(key=lambda x: (-x[1], -x[4], x[3]))
+prows, prev, rk = [], None, 0
+with open(os.path.join(HERE, "ranking_presence.tsv"), "w", encoding="utf-8") as out:
+    out.write("順位\t第一著者\t長期的な登壇の貢献（登壇回数と活動期間の幾何平均）\t登壇回数\t最初の年\t最後の年\t活動期間（年）\n")
+    for i, (a, x, c, y0, y1, span) in enumerate(pres, 1):
+        if round(x, 9) != prev:
+            rk, prev = i, round(x, 9)
+        prows.append([rk, a, round(x, 2), c, y0, y1, span])
+        out.write(f"{rk}\t{a}\t{x:.2f}\t{c}\t{y0}\t{y1}\t{span}\n")
+stats["presence"] = {"top": prows[:20], "rank": {r[1]: r[0] for r in prows if r[1] in ("栗原一貴", "五十嵐健夫")},
+                     "value": {r[1]: r[2] for r in prows if r[1] in ("栗原一貴", "五十嵐健夫")}}
+json.dump(stats, open(os.path.join(FIGS, "stats.json"), "w"), ensure_ascii=False, indent=1)
+for mode, t in THEMES.items():
+    top = prows[:20][::-1]
+    fig, ax = plt.subplots(figsize=(7.4, 0.32 * len(top) + 1.1))
+    frame(ax, t); ax.grid(axis="y", visible=False); ax.grid(axis="x", color=t["grid"], linewidth=0.8)
+    ax.barh(range(len(top)), [r[2] for r in top], height=0.62, color=t["s1"])
+    for i, r in enumerate(top):
+        ax.text(r[2] + 0.2, i, f"{r[2]:.1f}（{r[3]}回／{r[4]}–{r[5]}）", va="center", ha="left", color=t["text"], fontsize=8.5)
+    ax.set_yticks(range(len(top))); ax.set_yticklabels([r[1] for r in top], color=t["text"], fontsize=9.5)
+    ax.set_xlim(0, top[-1][2] * 1.45)
+    ax.set_xlabel("√（登壇回数 × 活動期間の年数）", color=t["text2"], fontsize=9)
+    title(fig, t, "長期的な登壇の貢献", f"WISS {Y0}–{Y1}、上位20人。活動期間は最初の登壇から最後の登壇までの年数")
+    save(fig, "presence", mode, t)
+print("長期的な登壇の貢献", [(r[0], r[1], r[2]) for r in prows[:8]])
