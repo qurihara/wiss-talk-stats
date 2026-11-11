@@ -258,5 +258,10 @@
   "path": "raw/web2/program_2025.html",
   "url": "https://www.wiss.org/WISS2025/program.html",
   "sha256": "984636b2cdbf50ea9ff9df4d005d1d595dcb9a82ece267df65e040a21c7f3f76"
+ },
+ {
+  "path": "raw/wiss2026/program.html",
+  "url": "https://www.wiss.org/WISS2026/program.html",
+  "sha256": "4765ac41965b6bf3f956c0442cdd8f874441550b4cd119fde24d6a4d898149b2"
  }
 ]

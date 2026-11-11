@@ -49,8 +49,9 @@ subprocess.run([sys.executable, os.path.join(ROOT, "fill1993.py"), os.path.join(
 
 # data/ と照合する
 same, diff = [], []
-# この手順では作らない年（別の入力から作る）。2026年は pipeline/parse_wiss2026_pdf.py が PDF から作る
-OTHER_SOURCE = {"2026.tsv"}
+# 2026年：公式のプログラムのページから作る
+subprocess.run([sys.executable, os.path.join(ROOT, "pipeline", "parse_wiss2026_html.py"), os.path.join(ROOT, "raw", "wiss2026", "program.html"), os.path.join(OUT, "2026.tsv")], check=True)
+OTHER_SOURCE = set()
 for f in sorted(os.listdir(os.path.join(ROOT, "data"))):
     if f in OTHER_SOURCE:
         continue

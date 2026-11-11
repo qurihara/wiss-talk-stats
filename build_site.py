@@ -9,6 +9,8 @@ import html, json, os, statistics
 HERE = os.path.dirname(os.path.abspath(__file__))
 S = json.load(open(os.path.join(HERE, "figs", "stats.json"), encoding="utf-8"))
 VERSION = open(os.path.join(HERE, "VERSION"), encoding="utf-8").read().strip()
+AS_OF = open(os.path.join(HERE, "AS_OF"), encoding="utf-8").read().strip()  # 資料の日付（1か所で管理する）
+AS_OF_JA = f"{int(AS_OF[:4])}年{int(AS_OF[5:7])}月{int(AS_OF[8:10])}日"
 REPO = "https://github.com/qurihara/wiss-talk-stats"
 SITE = "https://unryu.org/wiss-talk-stats/"
 Y0, Y1 = S["years"]
@@ -109,7 +111,7 @@ def build_index():
     toc = [("summary", "調査の結果の概要"), ("first", "第一著者の登壇回数"), ("trend", "年ごとの推移"),
            ("authors", "著者全員で見た分析"), ("speed", "発表速度"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界"), ("reuse", "データと再現の手順")]
     body = []
-    body.append(f'<header><span class="badge">{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者（すなわちおそらく発表者）の統計（{Y0}–{Y1}）</h1>'
+    body.append(f'<header><span class="badge">{AS_OF_JA}時点・{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者（すなわちおそらく発表者）の統計（{Y0}–{Y1}）</h1>'
                 f'<p class="lead">{e(intro_text())}</p><p class="lead">調査と集計：栗原一貴（津田塾大学）　｜　<a href="slides.html">スライド版</a>　｜　<a href="{REPO}">データとスクリプト（GitHub）</a></p></header>')
     if PROVISIONAL:
         body.append('<p class="note"><b>暫定版である。</b> WISS2026（第34回）のプログラムが公開されたあとに2026年分を加え、確定版とする予定である。</p>')
@@ -175,17 +177,19 @@ def build_index():
                 "<li><b>2011年に、1994年から2011年までの一覧を作った。</b> 栗原一貴が、WISS のウェブサイトのプログラムと紙の予稿集から、登壇発表410件の題名と著者（第4著者まで）を Microsoft Access のデータベースにまとめた。1997年のウェブのプログラムは著者の大半が姓だけで書かれているので、この年の姓名は紙の予稿集で補ったと考えられる。</li>"
                 "<li><b>2026年10月に、全回を調べ直した。</b> 栗原一貴の WISS2026 の登壇発表が何回目にあたるかを確かめる目的で始め、全員の順位表を作る調査に広げた。wiss.org に残る各年のプログラムと予稿集の目次を取得し、生成AI（Anthropic の Claude Code）に年代ごとに分けて一覧の表を作らせた。表は、取得したページの本文と全件を機械で照合して確かめた。</li>"
                 "<li><b>2011年のデータベースと突き合わせた。</b> 1994年から2011年までの410件を、題名で対応づけて第一著者を照合した。食い違いは、旧姓による表記の違いが1件と、データベースで名前が途中で切れていたものが2件だけであった。データベースに漏れていた登壇発表が3件見つかった。</li>"
-                f"<li><b>{Y0}年（第1回）を再構成した。</b> {Y0}年だけは発表の一覧のページが作られておらず、出版社（近代科学社）の書籍のページに題名38件だけが残っている。CiNii の引用の書誌、学会誌「コンピュータソフトウェア」11巻6号（1994年）の特集への再録、本人の researchmap、同じ著者の後の論文から、24件の第一著者を補った。残る{S['talks_unknown']}件は分かっていない。</li></ol>")
+                f"<li><b>{Y0}年（第1回）を再構成した。</b> {Y0}年だけは発表の一覧のページが作られておらず、出版社（近代科学社）の書籍のページに題名38件だけが残っている。CiNii の引用の書誌、学会誌「コンピュータソフトウェア」11巻6号（1994年）の特集への再録、本人の researchmap、同じ著者の後の論文から、24件の第一著者を補った。残る{S['talks_unknown']}件は分かっていない。</li>"
+                + ("<li><b>2026年11月に、WISS2026（第34回）を加えた。</b> 2026年11月5日に仮プログラムの PDF から表を作り、2026年11月12日に公開された公式のプログラムで作り直した。仮プログラムとの照合で、登壇発表の番号、順序、第一著者はすべて一致した。</li>" if Y1 >= 2026 else "")
+                + "</ol>")
     body.append('<h2 id="method">方法</h2><ul>'
                 "<li><b>数えたもの</b>：論文を伴う口頭発表（登壇発表）の第一著者。ロング発表、ショート発表、議論枠の発表を含む。</li>"
                 "<li><b>数えていないもの</b>：デモ・ポスター発表、招待講演、国際学会招待発表、ロングティザー発表、WISS Challenge、WISS Design。</li>"
-                "<li><b>情報源</b>：1993年は近代科学社の書籍のページの目次、1994年から2004年は wiss.org の各年のプログラム、2005年以降は wiss.org の各年の予稿集の目次とプログラム。</li>"
+                "<li><b>情報源</b>：1993年は近代科学社の書籍のページの目次、1994年から2004年は wiss.org の各年のプログラム、2005年から2025年は wiss.org の各年の予稿集の目次とプログラム、2026年は wiss.org の公式のプログラム（2026年11月12日に公開）。</li>"
                 "<li><b>名前の表記の揺れ</b>：空白と異体字をそろえ、旧姓と字体の違いは対応表で同一人物として扱った。上位の人については、別の表記で数え漏れていないことを目で確かめた。</li></ul>")
     body.append('<h2 id="limits">この調査の限界</h2><ul>'
                 f"<li>{Y0}年の{S['talks_unknown']}件は第一著者が分からない。紙の予稿集で確かめれば埋められる。</li>"
                 f"<li>{Y0}年の第一著者のうち2件は、同じ時期に同じ主題の論文を書いていることからの推定である。</li>"
                 "<li>同じ人が姓を変えた場合、対応表に載せた人だけを同一人物として扱っている。英字の名前は照合していない。</li>"
-                "<li>デモ・ポスター発表は、一覧が残っている年だけを数えた。</li></ul>")
+                f"<li>デモ・ポスター発表は、一覧が残っている年だけを数えた。2026年のデモ・ポスター発表は入れていない。</li><li>2026年は、会期の前に公開された公式のプログラム（{AS_OF_JA}時点）に基づく。</li></ul>")
     body.append(f'<h2 id="reuse">データと再現の手順</h2><p>集計に使った表、スクリプト、2011年のデータベースは、すべて <a href="{REPO}">GitHub のリポジトリ</a>にある。元のページを取得し直して、年ごとの表を1から作り直す手順も用意した（<a href="{REPO}#再現と発展のための手順">再現と発展のための手順</a>）。スクリプトは MIT ライセンス、表と図と文章は CC BY 4.0 で提供する。</p>')
     body.append(f'<footer>版 {e(VERSION)}（{STATUS}）　｜　<a href="{REPO}/blob/main/LICENSE">ライセンス</a>　｜　<a href="{REPO}/blob/main/CHANGELOG.md">変更履歴</a>　｜　<a href="{REPO}">GitHub</a>　｜　調査と集計：栗原一貴（津田塾大学）</footer>')
     return ("<!doctype html><html lang=\"ja\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
@@ -241,7 +245,7 @@ def mini_table(head, rows, num_cols=()):
 
 def build_slides():
     s = []
-    s.append(slide(f'<span class="badge">{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者<br>（すなわちおそらく発表者）の統計<br>（{Y0}–{Y1}）</h1>'
+    s.append(slide(f'<span class="badge">{AS_OF_JA}時点・{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者<br>（すなわちおそらく発表者）の統計<br>（{Y0}–{Y1}）</h1>'
                    f'<p class="meta">栗原一貴（津田塾大学）</p><p class="meta" style="font-size:18px">HTML 版：{SITE}</p>', "title"))
     s.append(slide("<h2>この調査で何を数えたか</h2><div class=\"big\">" + "".join(
         f'<div><div class="k">{e(k)}</div><div class="v">{e(v)}</div><div class="s">{e(s_)}</div></div>' for k, v, s_ in FACTS) + "</div><ul>"
@@ -278,7 +282,7 @@ def build_slides():
                    + ("<li>この版は暫定版である。WISS2026 のプログラムの公開後に2026年分を加えて、確定版とする</li>" if PROVISIONAL else "")
                    + f"</ul><p style=\"font-size:20px;margin-top:28px\">この調査のデータとスクリプト：{REPO}（スクリプトは MIT、表と図は CC BY 4.0）</p>"))
     n = len(s)
-    s = [x.replace("</section>", f'<div class="foot"><span>WISS 登壇発表の統計（{STATUS}・版 {e(VERSION)}）</span>'
+    s = [x.replace("</section>", f'<div class="foot"><span>WISS 登壇発表の統計（{AS_OF_JA}時点・版 {e(VERSION)}）</span>'
                    f'<span class="nav">← → で移動　｜　<a href="index.html">HTML 版</a></span><span>{i + 1} / {n}</span></div></section>') for i, x in enumerate(s)]
     js = """
 const S=[...document.querySelectorAll('.slide')];let i=Math.max(0,Math.min(S.length-1,(parseInt(location.hash.slice(1))||1)-1));
