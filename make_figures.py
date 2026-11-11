@@ -248,78 +248,29 @@ for mode, t in THEMES.items():
 print(json.dumps({k: stats["authors_all"][k] for k in ("people", "appearances", "top_last", "top_pairs")}, ensure_ascii=False))
 
 
-# ================= 発表速度 =================
-# デビュー年 = 第一著者として初めて登壇した年。経過年数 = 集計の最後の年 - デビュー年 + 1（デビュー年を1年目と数える）。
-# 発表速度 = 第一著者としての登壇回数 / 経過年数。
-# 経過年数が短い人ほど、少ない回数でも値が大きく振れる。そこで、登壇回数がポアソン分布に従うと考え、
-# 発表速度の95%信頼区間（Garwood の正確な区間）の下限で並べる。年数が短いほど区間が広がり、下限が下がる。
-# 補助として、デビューから10年間の登壇回数も数える（デビュー年が集計の最後の年の9年前までの人に限る）。
-from poisson_ci import ci
+# ================= デビューから10年間の登壇回数 =================
+# デビュー年 = 第一著者として初めて登壇した年。デビュー年を1年目として10年間に、第一著者として何回登壇したかを数える。
+# 10年間がそろう人（デビュー年が集計の最後の年の9年前まで）に限る。全員を同じ長さの期間で比べる指標である。
 WINDOW = 10
-speed = []
+win = []
 for a, c in cnt.items():
-    d = min(years_of[a]); el = Y1 - d + 1
-    lo, hi = ci(c)
-    w = sum(1 for y in years_of[a] if y < d + WINDOW) if d <= Y1 - WINDOW + 1 else None
-    speed.append(dict(name=a, n=c, debut=d, years=el, rate=c / el, lower=lo / el, upper=hi / el, window=w))
-speed.sort(key=lambda x: (-x["lower"], -x["n"], x["debut"]))
-with open(os.path.join(HERE, "ranking_speed.tsv"), "w", encoding="utf-8") as out:
-    out.write("順位\t第一著者\t発表速度の95%信頼区間の下限（回/年）\t発表速度（回/年）\t発表速度の95%信頼区間の上限（回/年）\t登壇回数\tデビュー年\t経過年数\tデビューから10年間の登壇回数\n")
-    prev, rk = None, 0
-    for i, x in enumerate(speed, 1):
-        if round(x["lower"], 9) != prev:
-            rk, prev = i, round(x["lower"], 9)
-        x["rank"] = rk
-        out.write(f"{rk}\t{x['name']}\t{x['lower']:.3f}\t{x['rate']:.3f}\t{x['upper']:.3f}\t{x['n']}\t{x['debut']}\t{x['years']}\t{'' if x['window'] is None else x['window']}\n")
-win = sorted([x for x in speed if x["window"] is not None], key=lambda x: (-x["window"], x["debut"]))
+    d = min(years_of[a])
+    if d <= Y1 - WINDOW + 1:
+        win.append(dict(name=a, n=c, debut=d, window=sum(1 for y in years_of[a] if y < d + WINDOW)))
+win.sort(key=lambda x: (-x["window"], x["debut"]))
 prev, rk = None, 0
-for i, x in enumerate(win, 1):
-    if x["window"] != prev:
-        rk, prev = i, x["window"]
-    x["wrank"] = rk
-stats["speed"] = {
-    "end_year": Y1, "people": len(speed),
-    "top": [[x["rank"], x["name"], round(x["lower"], 3), round(x["rate"], 3), round(x["upper"], 3), x["n"], x["debut"], x["years"]] for x in speed[:20]],
-    "window": WINDOW, "window_people": len(win), "window_last_debut": Y1 - WINDOW + 1,
-    "window_top": [[x["wrank"], x["name"], x["window"], x["debut"], x["n"]] for x in win if x["window"] >= 4],
-}
+with open(os.path.join(HERE, "ranking_window.tsv"), "w", encoding="utf-8") as out:
+    out.write("順位\t第一著者\tデビューから10年間の登壇回数\tデビュー年\t登壇回数の合計\n")
+    for i, x in enumerate(win, 1):
+        if x["window"] != prev:
+            rk, prev = i, x["window"]
+        x["wrank"] = rk
+        out.write(f"{rk}\t{x['name']}\t{x['window']}\t{x['debut']}\t{x['n']}\n")
+stats["window"] = {"window": WINDOW, "people": len(win), "last_debut": Y1 - WINDOW + 1,
+                   "top": [[x["wrank"], x["name"], x["window"], x["debut"], x["n"]] for x in win if x["window"] >= 4]}
+stats.pop("speed", None)
 json.dump(stats, open(os.path.join(FIGS, "stats.json"), "w"), ensure_ascii=False, indent=1)
-
 for mode, t in THEMES.items():
-    # 8. 発表速度の下限の上位20人（点は発表速度、線は95%信頼区間）
-    top = speed[:20][::-1]
-    fig, ax = plt.subplots(figsize=(7.6, 0.34 * len(top) + 1.2))
-    frame(ax, t); ax.grid(axis="y", visible=False); ax.grid(axis="x", color=t["grid"], linewidth=0.8)
-    for i, x in enumerate(top):
-        ax.plot([x["lower"], min(x["upper"], 1.6)], [i, i], color=t["muted"], linewidth=2, solid_capstyle="round", zorder=1)
-        ax.scatter([x["lower"]], [i], s=46, color=t["s1"], edgecolors=t["surface"], linewidths=1.5, zorder=3, marker="D")
-        ax.scatter([x["rate"]], [i], s=30, color=t["s2"], edgecolors=t["surface"], linewidths=1.2, zorder=3)
-        ax.text(1.62, i, f"{x['lower']:.2f}（{x['n']}回／{x['years']}年）", va="center", ha="left", color=t["text"], fontsize=8.5)
-    ax.set_yticks(range(len(top))); ax.set_yticklabels([x["name"] for x in top], color=t["text"], fontsize=9.5)
-    ax.set_xlim(0, 2.25); ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5])
-    ax.scatter([], [], s=46, color=t["s1"], marker="D", label="95%信頼区間の下限（順位の基準）")
-    ax.scatter([], [], s=30, color=t["s2"], label="発表速度（回数÷年数）")
-    ax.plot([], [], color=t["muted"], linewidth=2, label="95%信頼区間（1.6以上は省略）")
-    ax.set_xlabel("回/年", color=t["text2"], fontsize=9)
-    ax.legend(loc="upper center", bbox_to_anchor=(0.45, -0.09), ncol=3, frameon=False, fontsize=8.5, labelcolor=t["text"])
-    title(fig, t, "発表速度の下限で並べた第一著者", f"WISS {Y0}–{Y1}、上位20人。経過年数はデビュー年から{Y1}年まで。右の数字は下限（登壇回数／経過年数）")
-    save(fig, "speed", mode, t)
-
-    # 9. デビュー年と発表速度：割り算の値と、下限の比較（2回以上の人）
-    fig, axes = plt.subplots(1, 2, figsize=(9.2, 3.9), sharey=True)
-    sub = [x for x in speed if x["n"] >= 2]
-    for ax, key, lab in ((axes[0], "rate", "発表速度（回数÷年数）"), (axes[1], "lower", "95%信頼区間の下限")):
-        frame(ax, t); ax.grid(axis="x", color=t["grid"], linewidth=0.8)
-        ax.scatter([x["debut"] for x in sub], [x[key] for x in sub], s=[14 * x["n"] for x in sub], color=t["s1"],
-                   alpha=0.8, edgecolors=t["surface"], linewidths=1, zorder=3)
-        ax.set_xlim(Y0 - 1, Y1 + 1); ax.set_ylim(0, 1.05)
-        ax.set_xlabel("デビュー年", color=t["text2"], fontsize=9)
-        ax.text(0.02, 0.97, lab, transform=ax.transAxes, color=t["text"], fontsize=9.5, va="top")
-    axes[0].set_ylabel("回/年", color=t["text2"], fontsize=9)
-    title(fig, t, "デビュー年と発表速度", f"登壇2回以上の{len(sub)}人。点の大きさは登壇回数。左の割り算の値では最近のデビューほど高く出るが、右の下限ではその偏りが小さくなる", ax=axes[0])
-    save(fig, "speed_debut", mode, t)
-
-    # 10. デビューから10年間の登壇回数（上位）
     wt = [x for x in win if x["window"] >= 4][::-1]
     fig, ax = plt.subplots(figsize=(7.2, 0.32 * len(wt) + 1.1))
     frame(ax, t); ax.grid(axis="y", visible=False); ax.grid(axis="x", color=t["grid"], linewidth=0.8)
@@ -330,9 +281,8 @@ for mode, t in THEMES.items():
     ax.set_xlim(0, max(x["window"] for x in wt) + 3.2)
     ax.set_xlabel(f"デビュー年から{WINDOW}年間の登壇回数（第一著者として）", color=t["text2"], fontsize=9)
     title(fig, t, f"デビューから{WINDOW}年間の登壇回数", f"{Y1 - WINDOW + 1}年までにデビューした{len(win)}人のうち、4回以上の人")
-    save(fig, "speed_window", mode, t)
-print("発表速度", [(x["rank"], x["name"], round(x["lower"], 3), x["n"], x["years"]) for x in speed[:12]])
-print("10年間", [(x["wrank"], x["name"], x["window"], x["debut"]) for x in win[:15]])
+    save(fig, "window", mode, t)
+print("10年間", [(x["wrank"], x["name"], x["window"], x["debut"]) for x in win[:12]])
 
 
 # ================= 連続登壇の最長記録 =================

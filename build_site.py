@@ -28,7 +28,7 @@ top = S["top"]
 max_n = top[0][1]
 leaders = [a for a, c, *_ in top if c == max_n]
 aa = S["authors_all"]
-sp = S["speed"]
+wd = S["window"]
 ma = {int(k): v for k, v in aa["mean_authors"].items()}
 ma90 = statistics.mean(v for y, v in ma.items() if y < 2000)
 ma20 = statistics.mean(v for y, v in ma.items() if y >= 2020)
@@ -41,8 +41,6 @@ repeaters = S["authors"] - S["once"]
 any1 = aa["top_any"][0]
 any2 = aa["top_any"][1]
 pair1 = aa["top_pairs"][0]
-sp_top = sp["top"]
-win_top = sp["window_top"]
 
 
 def presence_note(S):
@@ -124,7 +122,7 @@ def intro_text():
 
 def build_index():
     toc = [("summary", "調査の結果の概要"), ("first", "第一著者の登壇回数"), ("trend", "年ごとの推移"), ("streak", "連続登壇の最長記録"),
-           ("authors", "著者全員で見た分析"), ("presence", "長期的な登壇の貢献"), ("speed", "発表速度"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界"), ("reuse", "データと再現の手順")]
+           ("authors", "著者全員で見た分析"), ("presence", "長期的な登壇の貢献"), ("window", "デビューから10年間の登壇回数"), ("history", "経緯"), ("method", "方法"), ("limits", "この調査の限界"), ("reuse", "データと再現の手順")]
     body = []
     body.append(f'<header><span class="badge">{AS_OF_JA}時点・{STATUS}・版 {e(VERSION)}</span><h1>WISS 登壇発表の第一著者（すなわちおそらく発表者）の統計（{Y0}–{Y1}）</h1>'
                 f'<p class="lead">{e(intro_text())}</p><p class="lead">調査と集計：栗原一貴（津田塾大学）　｜　<a href="slides.html">スライド版</a>　｜　<a href="{REPO}">データとスクリプト（GitHub）</a></p></header>')
@@ -140,7 +138,6 @@ def build_index():
                 f"<li>各年の登壇発表のうち、第一著者が WISS で初めて登壇する発表の割合は、平均で{S['first_share_mean']:.0%}である。2020年以降は{min(fs20):.0%}から{max(fs20):.0%}である。</li>"
                 f"<li>登壇発表は毎年{min(pyc)}件から{max(pyc)}件でほぼ一定である。一方、デモ・ポスター発表は2020年以降に大きく増え、{DY}年には{DN}件になった。</li>"
                 f"<li>著者全員で数えると、登壇発表に関わった人は{aa['people']}人である。最も多くの登壇発表に関わったのは{e(any1[0])}さんの{any1[1]}件である。</li>"
-                f"<li>登壇回数をデビューからの経過年数で割った「発表速度」を、95%信頼区間の下限で並べると、{e(sp_top[0][1])}さん、{e(sp_top[1][1])}さん、{e(sp_top[2][1])}さんの順になる。</li>"
                 "</ul>")
 
     body.append('<h2 id="first">第一著者の登壇回数</h2>')
@@ -185,21 +182,11 @@ def build_index():
     body.append(f'<figure>{picture("presence", "長期的な登壇の貢献の上位20人の横棒グラフ")}</figure>')
     body.append(table(["順位", "第一著者", "長期的な登壇の貢献", "登壇回数", "活動期間"], [[r[0], r[1], f"{r[2]:.1f}", r[3], f"{r[4]}–{r[5]}（{r[6]}年）"] for r in pr["top"]], (0, 2, 3))
                 + f'<p>全員分の表は <a href="{REPO}/blob/main/ranking_presence.tsv">ranking_presence.tsv</a> にある。</p>')
-    body.append('<h2 id="speed">発表速度</h2>')
-    body.append("<p>登壇回数の多さは、活動してきた年数の長さにも左右される。そこで、年数あたりの登壇の多さを表す指標として「発表速度」を定めた。</p><ul>"
-                "<li><b>デビュー年</b>：第一著者として初めて登壇した年。</li>"
-                f"<li><b>経過年数</b>：デビュー年を1年目として、集計の最後の年（{Y1}年）まで数えた年数。</li>"
-                "<li><b>発表速度</b>：第一著者としての登壇回数を経過年数で割った値（回/年）。</li></ul>")
-    body.append("<h3>発表速度の偏りと、その補正</h3><p>発表速度をそのまま比べると、デビューが最近の人ほど値が高く出る。経過年数が短いと少ない回数でも値が大きく振れること、デビュー年には必ず1回が入っていることが、その原因である。"
-                f"そこで、登壇回数がポアソン分布に従うと考え、発表速度の<b>95%信頼区間の下限</b>で並べた（Garwood の正確な信頼区間）。経過年数が短く回数が少ない人ほど区間が広がり、下限が下がる。この方法なら足切りが要らないので、第一著者{sp['people']}人の全員を並べた。</p>")
-    body.append(f'<figure>{picture("speed", "発表速度の95%信頼区間の下限で並べた上位20人の図")}</figure>')
-    body.append(f'<figure>{picture("speed_debut", "デビュー年と発表速度の散布図。左が割り算の値、右が信頼区間の下限")}<figcaption>左の割り算の値では、デビューが最近の人ほど点が上に寄る。右の下限では、この偏りが小さくなる。</figcaption></figure>')
-    body.append(table(["順位", "第一著者", "下限（回/年）", "発表速度（回/年）", "登壇回数", "デビュー年", "経過年数"],
-                      [[r[0], r[1], f"{r[2]:.2f}", f"{r[5] / r[7]:.2f}", r[5], r[6], r[7]] for r in sp_top], (0, 2, 3, 4, 5, 6)))
-    body.append(f"<h3>補助の指標：デビューから{sp['window']}年間の登壇回数</h3><p>期間を同じ長さにそろえて比べる指標である。{sp['window']}年間がそろう、{sp['window_last_debut']}年までにデビューした{sp['window_people']}人が対象である。</p>")
-    body.append(f'<figure>{picture("speed_window", "デビューから10年間の登壇回数の横棒グラフ")}</figure>')
-    body.append(table(["順位", "第一著者", f"デビューから{sp['window']}年間の登壇回数", "デビュー年", "登壇回数の合計"], win_top, (0, 2, 3, 4))
-                + f'<p>全員分の表は <a href="{REPO}/blob/main/ranking_speed.tsv">ranking_speed.tsv</a> にある。</p>')
+    body.append('<h2 id="window">デビューから10年間の登壇回数</h2>')
+    body.append(f"<p>期間を同じ長さにそろえて比べる指標である。第一著者として初めて登壇した年（デビュー年）を1年目として、{wd['window']}年間に第一著者として何回登壇したかを数えた。{wd['window']}年間がそろう、{wd['last_debut']}年までにデビューした{wd['people']}人が対象である。</p>")
+    body.append(f'<figure>{picture("window", "デビューから10年間の登壇回数の横棒グラフ")}</figure>')
+    body.append(table(["順位", "第一著者", f"デビューから{wd['window']}年間の登壇回数", "デビュー年", "登壇回数の合計"], wd["top"], (0, 2, 3, 4))
+                + f'<p>全員分の表は <a href="{REPO}/blob/main/ranking_window.tsv">ranking_window.tsv</a> にある。</p>')
 
     body.append('<h2 id="history">経緯</h2><ol>'
                 "<li><b>2011年に、1994年から2011年までの一覧を作った。</b> 栗原一貴が、WISS のウェブサイトのプログラムと紙の予稿集から、登壇発表410件の題名と著者（第4著者まで）を Microsoft Access のデータベースにまとめた。1997年のウェブのプログラムは著者の大半が姓だけで書かれているので、この年の姓名は紙の予稿集で補ったと考えられる。</li>"
@@ -297,15 +284,7 @@ def build_slides():
     s.append(slide_fig("登壇発表1件あたりの著者の数は増えている", f"1件あたりの著者の数は、1990年代の平均の約{ma90:.1f}人から、2020年代の平均の約{ma20:.1f}人に増えた。", "mean_authors", "1件あたりの著者の数"))
     s.append(slide_fig_table("長期的な登壇の貢献：√（登壇回数 × 活動期間）", presence_note_short(S), "presence", "長期的な登壇の貢献",
                              ["順位", "第一著者", "値", "回数", "活動期間"], [[r[0], r[1], f"{r[2]:.1f}", r[3], f"{r[4]}–{r[5]}"] for r in S["presence"]["top"][:10]], (0, 2, 3)))
-    s.append(slide("<h2>発表速度：年数あたりの登壇の多さ</h2><ul>"
-                   "<li><b>デビュー年</b>：第一著者として初めて登壇した年</li>"
-                   f"<li><b>発表速度</b>：登壇回数 ÷ デビューから{Y1}年までの経過年数</li>"
-                   "<li>登壇回数を経過年数で割っただけでは、デビューが最近の人ほど値が高く出る</li>"
-                   "<li>そこで、登壇回数がポアソン分布に従うと考え、発表速度の<b>95%信頼区間の下限</b>で並べる</li></ul>"
-                   f'<div class="fig">{picture("speed_debut", "デビュー年と発表速度の散布図")}</div>'))
-    s.append(slide_fig_table(f"発表速度の信頼区間の下限で並べると、{sp_top[0][1]}さんが1位になる", "図の菱形は信頼区間の下限（順位の基準）、丸は登壇回数を経過年数で割った値、線は95%信頼区間を表す。", "speed", "発表速度の下限",
-                             ["順位", "第一著者", "下限", "回数／年数"], [[r[0], r[1], f"{r[2]:.2f}", f"{r[5]}回／{r[7]}年"] for r in sp_top[:10]], (0, 2, 3)))
-    s.append(slide_fig(f"デビューから{sp['window']}年間の登壇回数", f"この指標の対象は、{sp['window']}年間がそろう{sp['window_last_debut']}年までにデビューした{sp['window_people']}人である。", "speed_window", "10年間の登壇回数"))
+    s.append(slide_fig(f"デビューから{wd['window']}年間の登壇回数", f"全員を同じ長さの期間で比べる。対象は、{wd['window']}年間がそろう{wd['last_debut']}年までにデビューした{wd['people']}人である。", "window", "10年間の登壇回数"))
     s.append(slide("<h2>この調査の経緯と限界</h2><ul>"
                    "<li>2011年に、1994年から2011年までの410件を Access のデータベースにまとめた</li>"
                    "<li>2026年10月に、wiss.org の全回のページから生成AI（Claude Code）で一覧を作り直し、2011年のデータベースと照合した</li>"
