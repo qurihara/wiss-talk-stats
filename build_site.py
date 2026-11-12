@@ -54,7 +54,7 @@ def presence_note(S):
 
 def presence_note_short(S):
     pr = S["presence"]; k, g = pr["rank"]["栗原一貴"], pr["rank"]["五十嵐健夫"]
-    tail = f"まだ届かなかった（栗原は{k}位、五十嵐さんは{g}位）。" if k > g else f"ついに上回った（栗原は{k}位、五十嵐さんは{g}位）。"
+    tail = f"まだ届かなかった😇（栗原は{k}位、五十嵐さんは{g}位）。" if k > g else f"ついに上回った（栗原は{k}位、五十嵐さんは{g}位）。"
     return "調査者の栗原が、師匠の五十嵐健夫さんを上回る指標を探して思いついた指標。しかし、" + tail if k > g else "調査者の栗原が、師匠の五十嵐健夫さんを上回る指標を探して思いついた指標。そして、" + tail
 
 
